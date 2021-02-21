@@ -25,52 +25,71 @@
 </div>
 
 <div class="row">
-  <!-- <div class="col-10 col-md-6"> -->
-  <!-- <div id="game-screen" class="center" *ngIf="opponentSelected"> -->
   <div id="game-screen" class="col-10 col-md-6" *ngIf="opponentSelected">
     <table class="table table-bordered center">
       <tr>
         <td>
-          <button type="button" class="cell" id="cell0"></button>
+          <button type="button" class="btn btn-outline-dark cell" id="cell0">
+            S
+          </button>
         </td>
         <td>
-          <button type="button" class="cell" id="cell1"></button>
+          <button type="button" class="btn btn-outline-dark cell" id="cell1">
+            S
+          </button>
         </td>
         <td>
-          <button type="button" class="cell" id="cell2"></button>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <button type="button" class="cell" id="cell3"></button>
-        </td>
-        <td>
-          <button type="button" class="cell" id="cell4"></button>
-        </td>
-        <td>
-          <button type="button" class="cell" id="cell5"></button>
+          <button type="button" class="btn btn-outline-dark cell" id="cell2">
+            S
+          </button>
         </td>
       </tr>
       <tr>
         <td>
-          <button type="button" class="cell" id="cell6"></button>
+          <button type="button" class="btn btn-outline-dark cell" id="cell3">
+            S
+          </button>
         </td>
         <td>
-          <button type="button" class="cell" id="cell7"></button>
+          <button type="button" class="btn btn-outline-dark cell" id="cell4">
+            S
+          </button>
         </td>
         <td>
-          <button type="button" class="cell" id="cell8"></button>
+          <button type="button" class="btn btn-outline-dark cell" id="cell5">
+            S
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <button type="button" class="btn btn-outline-dark cell" id="cell6">
+            S
+          </button>
+        </td>
+        <td>
+          <button type="button" class="btn btn-outline-dark cell" id="cell7">
+            S
+          </button>
+        </td>
+        <td>
+          <button type="button" class="btn btn-outline-dark cell" id="cell8">
+            S
+          </button>
         </td>
       </tr>
     </table>
-    <button type="button" id="restart">Restart</button>
-    <div></div>
+    <!-- <button type="button" id="restart">Restart</button> -->
+    <br /><br />
+    <button type="button" class="btn btn-warning" value="Reset">
+      <a [routerLink]="['/']" class="btn btn-default">Reset</a>
+    </button>
     <!-- </div> -->
   </div>
-  <div class="col-10 col-md-auto" *ngIf="opponentSelected">
+  <div class="col-10 col-md-4" *ngIf="opponentSelected">
     Column for Messages
   </div>
-  <div class="col-2 col-md-auto" *ngIf="opponentSelected">
-    Column for Buttons
+  <div class="col-2 col-md-2" *ngIf="opponentSelected">
+    Column for Scoreboard
   </div>
 </div>
