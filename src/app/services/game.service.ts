@@ -1,34 +1,23 @@
 import { Injectable } from '@angular/core';
-import { IGame } from './game';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { IGame } from '../models/game';
+import { NewGameModel } from '../models/newGameModel';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GameService {
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
-  newGame(): IGame {
-    return {
-      gameId: 1,
-      player1: 'Player 1',
-      player2: 'Computer',
-      nextMove: 'Player 1',
-      winner: '',
-      winningLine: 0,
-      currentBoard: {
-        boardId: 1,
-        p1Symbol: 'O',
-        p2Symbol: 'X',
-        pos0: '',
-        pos1: '',
-        pos2: '',
-        pos3: '',
-        pos4: '',
-        pos5: '',
-        pos6: '',
-        pos7: '',
-        pos8: '',
-      },
-    };
+  newGame(newGameParams: NewGameModel): Observable<IGame> {
+    return this.http.post<IGame>(
+      `${environment.game.baseurl}${environment.game.endpoint}${environment.game.new}`,
+      {
+        username: newGameParams.username,
+        opponent: newGameParams.opponent,
+      }
+    );
   }
 }
