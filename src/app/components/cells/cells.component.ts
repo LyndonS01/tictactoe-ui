@@ -17,4 +17,9 @@ export class CellsComponent implements OnInit {
     this.opponent = 'Human';
     this.opponentSelected = true;
   }
+
+  cpuButtonClicked() {
+    this.opponent = 'Computer';
+    this.opponentSelected = true;
+  }
 }

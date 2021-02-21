@@ -30,4 +30,13 @@ describe('CellsComponent', () => {
     expect(component.opponentSelected).toBe(true);
     expect(component.opponent).toEqual('Human');
   });
+
+  // click saves Computer as opponent
+  it('should save computer as opponent', () => {
+    expect(component.opponent).toEqual('');
+    expect(component.opponentSelected).toBe(false);
+    component.cpuButtonClicked();
+    expect(component.opponentSelected).toBe(true);
+    expect(component.opponent).toEqual('Computer');
+  });
 });

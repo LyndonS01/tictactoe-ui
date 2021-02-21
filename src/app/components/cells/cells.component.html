@@ -14,7 +14,14 @@
   >
     Human
   </button>
-  <button type="button" id="choose-cpu" class="choose">Computer</button>
+  <button
+    type="button"
+    id="choose-cpu"
+    class="choose"
+    (click)="cpuButtonClicked()"
+  >
+    Computer
+  </button>
 </div>
 
 <div id="game-screen" class="center" *ngIf="opponentSelected">
