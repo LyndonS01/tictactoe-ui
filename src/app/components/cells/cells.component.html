@@ -24,43 +24,53 @@
   </button>
 </div>
 
-<div id="game-screen" class="center" *ngIf="opponentSelected">
-  <!-- Every cell has an id "cell" followed by cell row and cell column -->
-  <table class="center">
-    <tr>
-      <td>
-        <button type="button" class="cell" id="cell00"></button>
-      </td>
-      <td>
-        <button type="button" class="cell" id="cell01"></button>
-      </td>
-      <td>
-        <button type="button" class="cell" id="cell02"></button>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <button type="button" class="cell" id="cell10"></button>
-      </td>
-      <td>
-        <button type="button" class="cell" id="cell11"></button>
-      </td>
-      <td>
-        <button type="button" class="cell" id="cell12"></button>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <button type="button" class="cell" id="cell20"></button>
-      </td>
-      <td>
-        <button type="button" class="cell" id="cell21"></button>
-      </td>
-      <td>
-        <button type="button" class="cell" id="cell22"></button>
-      </td>
-    </tr>
-  </table>
-  <button type="button" id="restart">Restart</button>
-  <div></div>
+<div class="row">
+  <!-- <div class="col-10 col-md-6"> -->
+  <!-- <div id="game-screen" class="center" *ngIf="opponentSelected"> -->
+  <div id="game-screen" class="col-10 col-md-6" *ngIf="opponentSelected">
+    <table class="table table-bordered center">
+      <tr>
+        <td>
+          <button type="button" class="cell" id="cell0"></button>
+        </td>
+        <td>
+          <button type="button" class="cell" id="cell1"></button>
+        </td>
+        <td>
+          <button type="button" class="cell" id="cell2"></button>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <button type="button" class="cell" id="cell3"></button>
+        </td>
+        <td>
+          <button type="button" class="cell" id="cell4"></button>
+        </td>
+        <td>
+          <button type="button" class="cell" id="cell5"></button>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <button type="button" class="cell" id="cell6"></button>
+        </td>
+        <td>
+          <button type="button" class="cell" id="cell7"></button>
+        </td>
+        <td>
+          <button type="button" class="cell" id="cell8"></button>
+        </td>
+      </tr>
+    </table>
+    <button type="button" id="restart">Restart</button>
+    <div></div>
+    <!-- </div> -->
+  </div>
+  <div class="col-10 col-md-auto" *ngIf="opponentSelected">
+    Column for Messages
+  </div>
+  <div class="col-2 col-md-auto" *ngIf="opponentSelected">
+    Column for Buttons
+  </div>
 </div>
