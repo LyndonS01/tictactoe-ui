@@ -13,13 +13,18 @@ export class CellsComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  humanButtonClicked() {
+  humanButtonClicked(): void {
     this.opponent = 'Human';
     this.opponentSelected = true;
   }
 
-  cpuButtonClicked() {
+  cpuButtonClicked(): void {
     this.opponent = 'Computer';
     this.opponentSelected = true;
+  }
+
+  resetButtonClicked(): void {
+    this.opponent = '';
+    this.opponentSelected = false;
   }
 }

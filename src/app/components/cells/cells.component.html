@@ -81,8 +81,13 @@
     </table>
     <!-- <button type="button" id="restart">Restart</button> -->
     <br /><br />
-    <button type="button" class="btn btn-warning" value="Reset">
-      <a [routerLink]="['/']" class="btn btn-default">Reset</a>
+    <button
+      type="button"
+      class="btn btn-warning"
+      value="Reset"
+      (click)="resetButtonClicked()"
+    >
+      Reset
     </button>
     <!-- </div> -->
   </div>

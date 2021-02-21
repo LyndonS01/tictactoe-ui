@@ -22,7 +22,7 @@ describe('CellsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // click saves Human as opponent
+  // click on Human saves Human as opponent
   it('should save human as opponent', () => {
     expect(component.opponent).toEqual('');
     expect(component.opponentSelected).toBe(false);
@@ -31,12 +31,19 @@ describe('CellsComponent', () => {
     expect(component.opponent).toEqual('Human');
   });
 
-  // click saves Computer as opponent
+  // click on Computer saves Computer as opponent
   it('should save computer as opponent', () => {
     expect(component.opponent).toEqual('');
     expect(component.opponentSelected).toBe(false);
     component.cpuButtonClicked();
     expect(component.opponentSelected).toBe(true);
     expect(component.opponent).toEqual('Computer');
+  });
+
+  // click on Reset restarts the game
+  it('should save computer as opponent', () => {
+    component.resetButtonClicked();
+    expect(component.opponentSelected).toBe(false);
+    expect(component.opponent).toEqual('');
   });
 });
