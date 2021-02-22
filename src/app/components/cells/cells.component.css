@@ -5,6 +5,13 @@ body {
   color: #333;
 }
 
+/* #game-screen {
+  background-color: lightgrey;
+  width: 100%;
+  padding-top: 100%;
+  position: relative;
+} */
+
 #enemy-screen,
 #intro-screen {
   max-width: 420px;
