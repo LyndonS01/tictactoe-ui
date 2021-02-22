@@ -8,6 +8,7 @@ import {
 
 import { GameService } from './game.service';
 import { environment } from 'src/environments/environment';
+import { MoveModel } from '../models/moveModel';
 
 describe('GameService', () => {
   let service: GameService;
@@ -84,6 +85,44 @@ describe('GameService', () => {
 
       const req = httpMock.expectOne(
         `${environment.game.baseurl}${environment.game.endpoint}${environment.game.new}`
+      );
+      expect(req.request.method).toBe('POST');
+      req.flush(testResponse);
+    });
+  });
+
+  describe('#sendNewMove', () => {
+    it('it should send move and receive the updated game', () => {
+      let testParams = new MoveModel('Player 1', 1, 4);
+      let testResponse = {
+        gameId: 1,
+        player1: 'Player 1',
+        player2: 'Computer',
+        nextMove: 'Player 1',
+        winner: '',
+        winningLine: 0,
+        currentBoard: {
+          boardId: 1,
+          p1Symbol: 'O',
+          p2Symbol: 'X',
+          pos0: 'X',
+          pos1: '',
+          pos2: '',
+          pos3: '',
+          pos4: 'O',
+          pos5: '',
+          pos6: '',
+          pos7: '',
+          pos8: '',
+        },
+      };
+
+      service.sendMove(testParams).subscribe((result) => {
+        expect(result).toEqual(testResponse);
+      });
+
+      const req = httpMock.expectOne(
+        `${environment.game.baseurl}${environment.game.endpoint}${environment.game.move}`
       );
       expect(req.request.method).toBe('POST');
       req.flush(testResponse);
