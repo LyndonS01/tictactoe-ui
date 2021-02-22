@@ -5,6 +5,7 @@ import { IGame } from '../models/game';
 import { NewGameModel } from '../models/newGameModel';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, tap, map } from 'rxjs/operators';
+import { MoveModel } from '../models/moveModel';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +20,22 @@ export class GameService {
         {
           username: newGameParams.username,
           opponent: newGameParams.opponent,
+        }
+      )
+      .pipe(
+        tap((data) => console.log('Response: ' + JSON.stringify(data)))
+        // catchError(this.handleError)
+      );
+  }
+
+  sendMove(moveParams: MoveModel): Observable<IGame> {
+    return this.http
+      .post<IGame>(
+        `${environment.game.baseurl}${environment.game.endpoint}${environment.game.move}`,
+        {
+          username: moveParams.username,
+          gameId: moveParams.gameId,
+          position: moveParams.position,
         }
       )
       .pipe(

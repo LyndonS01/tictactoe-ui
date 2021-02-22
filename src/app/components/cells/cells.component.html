@@ -27,55 +27,100 @@
 <div class="row">
   <div class="col" *ngIf="opponentSelected">
     <div id="game-screen">
-      <table class="table table-bordered center">
+      <table class="table table-bordered center" *ngIf="game">
         <tr>
           <td>
-            <button type="button" class="btn btn-outline-dark cell" id="cell0">
-              S
+            <button
+              type="button"
+              class="btn btn-outline-dark cell"
+              id="cell0"
+              (click)="positionButtonClicked(0)"
+            >
+              {{ game.currentBoard.pos0 }}
             </button>
           </td>
           <td>
-            <button type="button" class="btn btn-outline-dark cell" id="cell1">
-              S
+            <button
+              type="button"
+              class="btn btn-outline-dark cell"
+              id="cell1"
+              (click)="positionButtonClicked(1)"
+            >
+              {{ game.currentBoard.pos1 }}
             </button>
           </td>
           <td>
-            <button type="button" class="btn btn-outline-dark cell" id="cell2">
-              S
+            <button
+              type="button"
+              class="btn btn-outline-dark cell"
+              id="cell2"
+              (click)="positionButtonClicked(2)"
+            >
+              {{ game.currentBoard.pos2 }}
             </button>
           </td>
         </tr>
         <tr>
           <td>
-            <button type="button" class="btn btn-outline-dark cell" id="cell3">
-              S
+            <button
+              type="button"
+              class="btn btn-outline-dark cell"
+              id="cell3"
+              (click)="positionButtonClicked(3)"
+            >
+              {{ game.currentBoard.pos3 }}
             </button>
           </td>
           <td>
-            <button type="button" class="btn btn-outline-dark cell" id="cell4">
-              S
+            <button
+              type="button"
+              class="btn btn-outline-dark cell"
+              id="cell4"
+              (click)="positionButtonClicked(4)"
+            >
+              {{ game.currentBoard.pos4 }}
             </button>
           </td>
           <td>
-            <button type="button" class="btn btn-outline-dark cell" id="cell5">
-              S
+            <button
+              type="button"
+              class="btn btn-outline-dark cell"
+              id="cell5"
+              (click)="positionButtonClicked(5)"
+            >
+              {{ game.currentBoard.pos5 }}
             </button>
           </td>
         </tr>
         <tr>
           <td>
-            <button type="button" class="btn btn-outline-dark cell" id="cell6">
-              S
+            <button
+              type="button"
+              class="btn btn-outline-dark cell"
+              id="cell6"
+              (click)="positionButtonClicked(6)"
+            >
+              {{ game.currentBoard.pos6 }}
             </button>
           </td>
           <td>
-            <button type="button" class="btn btn-outline-dark cell" id="cell7">
-              S
+            <button
+              type="button"
+              class="btn btn-outline-dark cell"
+              id="cell7"
+              (click)="positionButtonClicked(7)"
+            >
+              {{ game.currentBoard.pos7 }}
             </button>
           </td>
           <td>
-            <button type="button" class="btn btn-outline-dark cell" id="cell8">
-              S
+            <button
+              type="button"
+              class="btn btn-outline-dark cell"
+              id="cell8"
+              (click)="positionButtonClicked(8)"
+            >
+              {{ game.currentBoard.pos8 }}
             </button>
           </td>
         </tr>

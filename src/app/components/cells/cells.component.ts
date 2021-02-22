@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IGame } from 'src/app/models/game';
+import { MoveModel } from 'src/app/models/moveModel';
 import { NewGameModel } from 'src/app/models/newGameModel';
 import { GameService } from 'src/app/services/game.service';
 
@@ -11,8 +12,12 @@ import { GameService } from 'src/app/services/game.service';
 export class CellsComponent implements OnInit {
   username: string = 'Player 1';
   opponent: string = '';
+  gameId: number = 0;
+  position: number = 0;
+
   opponentSelected: boolean = false;
   game: IGame | undefined;
+
   errorMessage = '';
 
   constructor(private gameService: GameService) {}
@@ -32,7 +37,9 @@ export class CellsComponent implements OnInit {
       opponent: this.opponent,
     };
     this.gameService.newGame(newGameParams).subscribe({
-      next: (game) => (this.game = game),
+      next: (game) => {
+        (this.game = game), (this.gameId = game.gameId);
+      },
       // error: (err) => (this.errorMessage = err),
     });
   }
@@ -40,5 +47,25 @@ export class CellsComponent implements OnInit {
   resetButtonClicked(): void {
     this.opponent = '';
     this.opponentSelected = false;
+  }
+
+  positionButtonClicked(position: number): void {
+    if (this.gameId > 0) {
+      // extract element ID and position value
+      // let id = (<HTMLInputElement>document.getElementById('cell' + position)).value;
+      this.position = +position;
+      let moveParams: MoveModel = {
+        username: this.username,
+        gameId: this.gameId,
+        position: this.position,
+      };
+
+      this.gameService.sendMove(moveParams).subscribe({
+        next: (game) => {
+          (this.game = game), (this.gameId = game.gameId);
+        },
+        // error: (err) => (this.errorMessage = err),
+      });
+    }
   }
 }

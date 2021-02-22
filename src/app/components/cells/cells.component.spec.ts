@@ -2,6 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Observable, of } from 'rxjs';
 import { IGame } from 'src/app/models/game';
+import { MoveModel } from 'src/app/models/moveModel';
 import { NewGameModel } from 'src/app/models/newGameModel';
 import { GameService } from 'src/app/services/game.service';
 
@@ -34,29 +35,91 @@ class MockService {
 
     return of(returnedGame);
   }
+
+  sendMove(moveParams: MoveModel): Observable<IGame> {
+    let returnedGame: IGame = {
+      gameId: 1,
+      player1: 'Player 1',
+      player2: 'Computer',
+      nextMove: 'Player 1',
+      winner: '',
+      winningLine: 0,
+      currentBoard: {
+        boardId: 1,
+        p1Symbol: 'O',
+        p2Symbol: 'X',
+        pos0: 'X',
+        pos1: '',
+        pos2: '',
+        pos3: '',
+        pos4: 'O',
+        pos5: '',
+        pos6: '',
+        pos7: '',
+        pos8: '',
+      },
+    };
+
+    return of(returnedGame);
+  }
 }
 
 describe('CellsComponent', () => {
   let component: CellsComponent;
   let fixture: ComponentFixture<CellsComponent>;
-  let service: GameService;
+  let service1: GameService;
+  // let mockGameService1: GameService;
 
   beforeEach(async () => {
+    // mockGameService1 = jasmine.createSpyObj(['newGame']);
+
     await TestBed.configureTestingModule({
       imports: [HttpClientModule],
       declarations: [CellsComponent],
-      providers: [{ provide: GameService, useClass: MockService }],
+      // providers: [{ provide: GameService, useClass: MockService }],
+      providers: [
+        { provide: GameService, useClass: MockService },
+        // { provide: GameService, useValue: mockGameService1 },
+      ],
     }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CellsComponent);
     component = fixture.componentInstance;
-    service = TestBed.get(GameService);
+    service1 = TestBed.inject(GameService);
+
+    // let newGameParams: NewGameModel = {
+    //   username: 'Player 1',
+    //   opponent: 'Computer',
+    // };
+
+    // mockGameService1.newGame.and.returnValue(
+    //   of<IGame>({
+    //     gameId: 1,
+    //     player1: 'Player 1',
+    //     player2: 'Computer',
+    //     nextMove: 'Player 1',
+    //     winner: '',
+    //     winningLine: 0,
+    //     currentBoard: {
+    //       boardId: 1,
+    //       p1Symbol: 'O',
+    //       p2Symbol: 'X',
+    //       pos0: 'X',
+    //       pos1: '',
+    //       pos2: '',
+    //       pos3: '',
+    //       pos4: 'O',
+    //       pos5: '',
+    //       pos6: '',
+    //       pos7: '',
+    //       pos8: '',
+    //     },
+    //   })
+    // );
+
     fixture.detectChanges();
-    // component.humanButtonClicked;
-    // component.opponentSelected;
-    // component.resetButtonClicked;
   });
 
   it('should create', () => {
@@ -76,13 +139,13 @@ describe('CellsComponent', () => {
 
   // click on Computer saves Computer as opponent
   it('should save computer as opponent', () => {
-    // let spy = spyOn(service, 'newGame');
+    spyOn(service1, 'newGame').and.returnValue(of());
     expect(component.opponent).toEqual('');
     expect(component.opponentSelected).toBe(false);
 
     component.cpuButtonClicked();
 
-    // expect(spy).toHaveBeenCalled();
+    expect(service1.newGame).toHaveBeenCalled();
     expect(component.opponentSelected).toBe(true);
     expect(component.opponent).toEqual('Computer');
   });
@@ -93,5 +156,15 @@ describe('CellsComponent', () => {
 
     expect(component.opponentSelected).toBe(false);
     expect(component.opponent).toEqual('');
+  });
+
+  // click on a cell sends update to game server
+  it('should send update to game server', () => {
+    component.positionButtonClicked(4);
+    spyOn(service1, 'sendMove').and.returnValue(of<IGame>());
+
+    // expect(service1.sendMove).toHaveBeenCalled();
+    expect(component.username).toEqual('Player 1');
+    // expect(component.game?.currentBoard.pos4).toEqual('O');
   });
 });
