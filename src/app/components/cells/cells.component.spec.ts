@@ -54,6 +54,9 @@ describe('CellsComponent', () => {
     component = fixture.componentInstance;
     service = TestBed.get(GameService);
     fixture.detectChanges();
+    // component.humanButtonClicked;
+    // component.opponentSelected;
+    // component.resetButtonClicked;
   });
 
   it('should create', () => {
@@ -64,16 +67,22 @@ describe('CellsComponent', () => {
   it('should save human as opponent', () => {
     expect(component.opponent).toEqual('');
     expect(component.opponentSelected).toBe(false);
+
     component.humanButtonClicked();
+
     expect(component.opponentSelected).toBe(true);
     expect(component.opponent).toEqual('Human');
   });
 
   // click on Computer saves Computer as opponent
   it('should save computer as opponent', () => {
+    // let spy = spyOn(service, 'newGame');
     expect(component.opponent).toEqual('');
     expect(component.opponentSelected).toBe(false);
+
     component.cpuButtonClicked();
+
+    // expect(spy).toHaveBeenCalled();
     expect(component.opponentSelected).toBe(true);
     expect(component.opponent).toEqual('Computer');
   });
@@ -81,6 +90,7 @@ describe('CellsComponent', () => {
   // click on Reset restarts the game
   it('should save computer as opponent', () => {
     component.resetButtonClicked();
+
     expect(component.opponentSelected).toBe(false);
     expect(component.opponent).toEqual('');
   });
