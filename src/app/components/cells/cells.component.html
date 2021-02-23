@@ -25,7 +25,7 @@
 </div>
 
 <div class="row">
-  <div class="col" *ngIf="opponentSelected">
+  <div class="col-8" *ngIf="opponentSelected">
     <div id="game-screen">
       <table class="table table-bordered center" *ngIf="game">
         <tr>
@@ -35,6 +35,12 @@
               class="btn btn-outline-dark cell"
               id="cell0"
               (click)="positionButtonClicked(0)"
+              [ngClass]="{
+                wincell:
+                  game.winningLine === 1 ||
+                  game.winningLine === 4 ||
+                  game.winningLine === 7
+              }"
             >
               {{ game.currentBoard.pos0 }}
             </button>
@@ -45,6 +51,9 @@
               class="btn btn-outline-dark cell"
               id="cell1"
               (click)="positionButtonClicked(1)"
+              [ngClass]="{
+                wincell: game.winningLine === 1 || game.winningLine === 5
+              }"
             >
               {{ game.currentBoard.pos1 }}
             </button>
@@ -55,6 +64,12 @@
               class="btn btn-outline-dark cell"
               id="cell2"
               (click)="positionButtonClicked(2)"
+              [ngClass]="{
+                wincell:
+                  game.winningLine === 1 ||
+                  game.winningLine === 4 ||
+                  game.winningLine === 8
+              }"
             >
               {{ game.currentBoard.pos2 }}
             </button>
@@ -67,6 +82,9 @@
               class="btn btn-outline-dark cell"
               id="cell3"
               (click)="positionButtonClicked(3)"
+              [ngClass]="{
+                wincell: game.winningLine === 2 || game.winningLine === 4
+              }"
             >
               {{ game.currentBoard.pos3 }}
             </button>
@@ -77,6 +95,13 @@
               class="btn btn-outline-dark cell"
               id="cell4"
               (click)="positionButtonClicked(4)"
+              [ngClass]="{
+                wincell:
+                  game.winningLine === 2 ||
+                  game.winningLine === 5 ||
+                  game.winningLine === 7 ||
+                  game.winningLine === 8
+              }"
             >
               {{ game.currentBoard.pos4 }}
             </button>
@@ -87,6 +112,9 @@
               class="btn btn-outline-dark cell"
               id="cell5"
               (click)="positionButtonClicked(5)"
+              [ngClass]="{
+                wincell: game.winningLine === 2 || game.winningLine === 6
+              }"
             >
               {{ game.currentBoard.pos5 }}
             </button>
@@ -99,6 +127,12 @@
               class="btn btn-outline-dark cell"
               id="cell6"
               (click)="positionButtonClicked(6)"
+              [ngClass]="{
+                wincell:
+                  game.winningLine === 3 ||
+                  game.winningLine === 4 ||
+                  game.winningLine === 8
+              }"
             >
               {{ game.currentBoard.pos6 }}
             </button>
@@ -109,6 +143,9 @@
               class="btn btn-outline-dark cell"
               id="cell7"
               (click)="positionButtonClicked(7)"
+              [ngClass]="{
+                wincell: game.winningLine === 3 || game.winningLine === 5
+              }"
             >
               {{ game.currentBoard.pos7 }}
             </button>
@@ -119,6 +156,12 @@
               class="btn btn-outline-dark cell"
               id="cell8"
               (click)="positionButtonClicked(8)"
+              [ngClass]="{
+                wincell:
+                  game.winningLine === 3 ||
+                  game.winningLine === 6 ||
+                  game.winningLine === 7
+              }"
             >
               {{ game.currentBoard.pos8 }}
             </button>
@@ -138,7 +181,7 @@
     </button>
   </div>
 
-  <div class="col" *ngIf="opponentSelected">
+  <div class="col-4" *ngIf="opponentSelected">
     <div>Row for Scoreboard</div>
     <br /><br />
     <div>Row for Messages</div>

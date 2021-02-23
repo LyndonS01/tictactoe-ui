@@ -64,6 +64,8 @@ export class CellsComponent implements OnInit {
         },
         // error: (err) => (this.errorMessage = err),
       });
+
+      // check for win or draw here
     }
   }
 }
