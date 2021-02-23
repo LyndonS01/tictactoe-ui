@@ -1,10 +1,13 @@
 import { HttpClientModule } from '@angular/common/http';
+import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Observable, of } from 'rxjs';
 import { IGame } from 'src/app/models/game';
 import { MoveModel } from 'src/app/models/moveModel';
 import { NewGameModel } from 'src/app/models/newGameModel';
 import { GameService } from 'src/app/services/game.service';
+import { MessagesService } from 'src/app/services/messages.service';
+import { MessagesComponent } from '../messages/messages.component';
 
 import { CellsComponent } from './cells.component';
 
@@ -68,12 +71,17 @@ describe('CellsComponent', () => {
   let component: CellsComponent;
   let fixture: ComponentFixture<CellsComponent>;
   let service1: GameService;
+  let service2: MessagesService;
+  let component2: MessagesService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientModule],
-      declarations: [CellsComponent],
-      providers: [{ provide: GameService, useClass: MockService }],
+      declarations: [CellsComponent, MessagesComponent],
+      providers: [
+        { provide: GameService, useClass: MockService },
+        { provide: MessagesService, useClass: MessagesService },
+      ],
     }).compileComponents();
   });
 
@@ -81,6 +89,7 @@ describe('CellsComponent', () => {
     fixture = TestBed.createComponent(CellsComponent);
     component = fixture.componentInstance;
     service1 = TestBed.inject(GameService);
+    service2 = TestBed.inject(MessagesService);
 
     fixture.detectChanges();
   });
@@ -138,5 +147,35 @@ describe('CellsComponent', () => {
 
     expect(component.position).toEqual(0);
     expect(spyService).not.toHaveBeenCalled();
+  });
+
+  // checkWinOrDraw with Player 1 as winner
+  it('should add message that You won', () => {
+    component.winningLine = 1;
+    component.username = 'Player 1';
+    component.winner = 'Player 1';
+    let spyService1 = spyOn(service2, 'add');
+    // let spyService2 = spyOn(service2, 'peek');
+
+    component.checkWinOrDraw();
+
+    expect(component.checkWinOrDraw()).toHaveBeenCalled;
+    expect(spyService1).toHaveBeenCalled();
+    // expect(service2.messages[0]).toBe('You won the game!');
+  });
+
+  // checkWinOrDraw with Computer as winner
+  it('should add message that You won', () => {
+    component.winningLine = 1;
+    component.username = 'Player 1';
+    component.winner = 'Computer';
+    let spyService1 = spyOn(service2, 'add');
+    // let spyService2 = spyOn(service2, 'peek');
+
+    component.checkWinOrDraw();
+
+    expect(component.checkWinOrDraw()).toHaveBeenCalled;
+    expect(spyService1).toHaveBeenCalled();
+    // expect(service2.messages[0]).toBe('The computer won the game!');
   });
 });

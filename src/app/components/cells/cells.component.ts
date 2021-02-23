@@ -15,11 +15,11 @@ export class CellsComponent implements OnInit {
   opponent: string = '';
   gameId: number = 0;
   position: number = 0;
-
+  winningLine: number = 0;
+  winner: string = '';
+  errorMessage = '';
   opponentSelected: boolean = false;
   game: IGame | undefined;
-
-  errorMessage = '';
 
   constructor(
     private gameService: GameService,
@@ -71,7 +71,9 @@ export class CellsComponent implements OnInit {
         next: (game) => {
           (this.game = game),
             (this.gameId = game.gameId),
-            this.checkWinOrDraw();
+            (this.winningLine = game.winningLine),
+            (this.winner = game.winner);
+          this.checkWinOrDraw();
         },
         // error: (err) => (this.errorMessage = err),
       });
@@ -80,6 +82,18 @@ export class CellsComponent implements OnInit {
 
   // check for win or draw here
   checkWinOrDraw(): void {
-    this.messagesService.add(`Your move, ${this.game?.nextMove}`);
+    if (this.winningLine > 0) {
+      let winningPlayer = 'You';
+      if (this.winner !== this.game?.player1) {
+        if (this.winner !== 'Computer') {
+          winningPlayer = this.winner;
+        } else {
+          winningPlayer = 'The computer';
+        }
+      }
+      this.messagesService.add(`${winningPlayer} won the game!`);
+    } else {
+      this.messagesService.add(`Your move, ${this.game?.nextMove}`);
+    }
   }
 }
