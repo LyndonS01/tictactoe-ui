@@ -5,6 +5,13 @@ body {
   color: #333;
 }
 
+/* #game-screen {
+  background-color: lightgrey;
+  width: 100%;
+  padding-top: 100%;
+  position: relative;
+} */
+
 #enemy-screen,
 #intro-screen {
   max-width: 420px;
@@ -29,8 +36,8 @@ body {
 /****** GAME GRID ******/
 
 table {
-  max-width: 420px;
-  max-height: 420px;
+  max-width: 600px;
+  max-height: 600px;
   width: 85vw; /* 85% of the viewport (body) width */
   height: 85vw;
   border-spacing: 4px 2px; /* Space between cells */
@@ -41,8 +48,8 @@ td {
   height: 33%;
 }
 .cell {
-  font-size: 3.4em;
-  font-size: 16vmin; /* Responsive font size! Awesome! */
+  font-size: 8em;
+  /* font-size: 16vmin; */
   height: 100%; /* Fill the container (td) */
   width: 100%;
 }
