@@ -1,8 +1,8 @@
 import { HttpClientModule } from '@angular/common/http';
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { Observable, of } from 'rxjs';
-import { IGame } from 'src/app/models/game';
+import { ICurrentBoard, IGame } from 'src/app/models/game';
 import { MoveModel } from 'src/app/models/moveModel';
 import { NewGameModel } from 'src/app/models/newGameModel';
 import { GameService } from 'src/app/services/game.service';
@@ -72,14 +72,16 @@ describe('CellsComponent', () => {
   let fixture: ComponentFixture<CellsComponent>;
   let service1: GameService;
   let service2: MessagesService;
-  let component2: MessagesService;
+  let mockMessagesService: any;
+  // let component2: MessagesService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientModule],
-      declarations: [CellsComponent, MessagesComponent],
+      declarations: [CellsComponent],
       providers: [
         { provide: GameService, useClass: MockService },
+        // { provide: MessagesService, useValue: mockMessagesService },
         { provide: MessagesService, useClass: MessagesService },
       ],
     }).compileComponents();
@@ -90,6 +92,8 @@ describe('CellsComponent', () => {
     component = fixture.componentInstance;
     service1 = TestBed.inject(GameService);
     service2 = TestBed.inject(MessagesService);
+
+    mockMessagesService = jasmine.createSpyObj(['add', 'clear', 'peek']);
 
     fixture.detectChanges();
   });
@@ -150,32 +154,95 @@ describe('CellsComponent', () => {
   });
 
   // checkWinOrDraw with Player 1 as winner
-  it('should add message that You won', () => {
+  // it('should add message that You won', () => {
+  it('should add message that You won', fakeAsync(() => {
     component.winningLine = 1;
     component.username = 'Player 1';
     component.winner = 'Player 1';
     let spyService1 = spyOn(service2, 'add');
     // let spyService2 = spyOn(service2, 'peek');
+    // mockMessagesService.add('You won the game!');
+    // fixture.detectChanges();
+    let board: ICurrentBoard = {
+      boardId: 1,
+      p1Symbol: 'O',
+      p2Symbol: 'X',
+      pos0: 'X',
+      pos1: 'O',
+      pos2: 'X',
+      pos3: 'O',
+      pos4: 'X',
+      pos5: 'O',
+      pos6: 'X',
+      pos7: 'O',
+      pos8: '',
+    };
 
-    component.checkWinOrDraw();
+    component.checkWinOrDraw(board);
+    // fixture.detectChanges();
 
-    expect(component.checkWinOrDraw()).toHaveBeenCalled;
+    expect(component.checkWinOrDraw(board)).toHaveBeenCalled;
     expect(spyService1).toHaveBeenCalled();
-    // expect(service2.messages[0]).toBe('You won the game!');
-  });
+    // expect(mockMessagesService.add).toHaveBeenCalled();
+    // expect(mockMessagesService.peek()).toBe('You won the game!');
+    // });
+  }));
 
   // checkWinOrDraw with Computer as winner
-  it('should add message that You won', () => {
+  it('should add message that the computer won', () => {
     component.winningLine = 1;
     component.username = 'Player 1';
     component.winner = 'Computer';
     let spyService1 = spyOn(service2, 'add');
     // let spyService2 = spyOn(service2, 'peek');
+    let board: ICurrentBoard = {
+      boardId: 1,
+      p1Symbol: 'O',
+      p2Symbol: 'X',
+      pos0: 'X',
+      pos1: 'O',
+      pos2: 'X',
+      pos3: 'O',
+      pos4: 'X',
+      pos5: 'O',
+      pos6: 'X',
+      pos7: 'O',
+      pos8: '',
+    };
+    component.checkWinOrDraw(board);
 
-    component.checkWinOrDraw();
-
-    expect(component.checkWinOrDraw()).toHaveBeenCalled;
+    expect(component.checkWinOrDraw(board)).toHaveBeenCalled;
     expect(spyService1).toHaveBeenCalled();
     // expect(service2.messages[0]).toBe('The computer won the game!');
+  });
+
+  // checkWinOrDraw with one position left
+  it('should add message that the game is drawn', () => {
+    component.winningLine = 0;
+    component.username = 'Player 1';
+    component.winner = '';
+
+    let board: ICurrentBoard = {
+      boardId: 1,
+      p1Symbol: 'O',
+      p2Symbol: 'X',
+      pos0: 'X',
+      pos1: 'O',
+      pos2: 'X',
+      pos3: 'O',
+      pos4: 'X',
+      pos5: 'O',
+      pos6: 'X',
+      pos7: 'O',
+      pos8: '',
+    };
+    let spyService1 = spyOn(service2, 'add');
+    // let spyService2 = spyOn(service2, 'peek');
+
+    component.checkWinOrDraw(board);
+
+    expect(component.checkWinOrDraw(board)).toHaveBeenCalled;
+    // expect(spyService1).toHaveBeenCalled();
+    // expect(service2.messages[0]).toBe('This game is a draw');
   });
 });

@@ -15,4 +15,9 @@ export class MessagesService {
   clear(): void {
     this.messages = [];
   }
+
+  // peek(): string {
+  //   if (this.messages.length === 0) return '';
+  //   return this.messages[0];
+  // }
 }

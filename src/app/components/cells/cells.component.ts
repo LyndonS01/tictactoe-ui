@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IGame } from 'src/app/models/game';
+import { ICurrentBoard, IGame } from 'src/app/models/game';
 import { MoveModel } from 'src/app/models/moveModel';
 import { NewGameModel } from 'src/app/models/newGameModel';
 import { GameService } from 'src/app/services/game.service';
@@ -20,6 +20,7 @@ export class CellsComponent implements OnInit {
   errorMessage = '';
   opponentSelected: boolean = false;
   game: IGame | undefined;
+  filledPositions: number = 0;
 
   constructor(
     private gameService: GameService,
@@ -73,7 +74,7 @@ export class CellsComponent implements OnInit {
             (this.gameId = game.gameId),
             (this.winningLine = game.winningLine),
             (this.winner = game.winner);
-          this.checkWinOrDraw();
+          this.checkWinOrDraw(game.currentBoard);
         },
         // error: (err) => (this.errorMessage = err),
       });
@@ -81,7 +82,8 @@ export class CellsComponent implements OnInit {
   }
 
   // check for win or draw here
-  checkWinOrDraw(): void {
+  checkWinOrDraw(currentBoard: ICurrentBoard): void {
+    //check for win conditions
     if (this.winningLine > 0) {
       let winningPlayer = 'You';
       if (this.winner !== this.game?.player1) {
@@ -92,8 +94,22 @@ export class CellsComponent implements OnInit {
         }
       }
       this.messagesService.add(`${winningPlayer} won the game!`);
-    } else {
-      this.messagesService.add(`Your move, ${this.game?.nextMove}`);
-    }
+    } else if (this.winningLine == 0) {
+      // There is no winner yet. If one position is left, then game is drawn.
+      let filledPositions = 0;
+      if (currentBoard.pos0 !== '') filledPositions++;
+      if (currentBoard.pos1 !== '') filledPositions++;
+      if (currentBoard.pos2 !== '') filledPositions++;
+      if (currentBoard.pos3 !== '') filledPositions++;
+      if (currentBoard.pos4 !== '') filledPositions++;
+      if (currentBoard.pos5 !== '') filledPositions++;
+      if (currentBoard.pos6 !== '') filledPositions++;
+      if (currentBoard.pos7 !== '') filledPositions++;
+      if (currentBoard.pos8 !== '') filledPositions++;
+      this.filledPositions = filledPositions;
+      if (filledPositions === 8) {
+        this.messagesService.add(`This game is a draw`);
+      }
+    } else this.messagesService.add(`Your move, ${this.game?.nextMove}`);
   }
 }
