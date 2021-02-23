@@ -34,6 +34,7 @@ export class GameService {
   }
 
   sendMove(moveParams: MoveModel): Observable<IGame> {
+    this.messagesService.add('Sending your move to the game server...');
     return this.http
       .post<IGame>(
         `${environment.game.baseurl}${environment.game.endpoint}${environment.game.move}`,
