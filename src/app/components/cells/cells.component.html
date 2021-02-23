@@ -40,9 +40,12 @@
                   game.winningLine === 1 ||
                   game.winningLine === 4 ||
                   game.winningLine === 7,
-                cannotuse: game.currentBoard.pos0 !== ''
+                cannotuse:
+                  game.currentBoard.pos0 !== '' || filledPositions === 8
               }"
-              [disabled]="game.currentBoard.pos0 !== ''"
+              [disabled]="
+                game.currentBoard.pos0 !== '' || filledPositions === 8
+              "
             >
               {{ game.currentBoard.pos0 }}
             </button>
@@ -55,9 +58,12 @@
               (click)="positionButtonClicked(1)"
               [ngClass]="{
                 wincell: game.winningLine === 1 || game.winningLine === 5,
-                cannotuse: game.currentBoard.pos1 !== ''
+                cannotuse:
+                  game.currentBoard.pos1 !== '' || filledPositions === 8
               }"
-              [disabled]="game.currentBoard.pos1 !== ''"
+              [disabled]="
+                game.currentBoard.pos1 !== '' || filledPositions === 8
+              "
             >
               {{ game.currentBoard.pos1 }}
             </button>
@@ -71,11 +77,14 @@
               [ngClass]="{
                 wincell:
                   game.winningLine === 1 ||
-                  game.winningLine === 4 ||
+                  game.winningLine === 6 ||
                   game.winningLine === 8,
-                cannotuse: game.currentBoard.pos2 !== ''
+                cannotuse:
+                  game.currentBoard.pos2 !== '' || filledPositions === 8
               }"
-              [disabled]="game.currentBoard.pos2 !== ''"
+              [disabled]="
+                game.currentBoard.pos2 !== '' || filledPositions === 8
+              "
             >
               {{ game.currentBoard.pos2 }}
             </button>
@@ -90,9 +99,12 @@
               (click)="positionButtonClicked(3)"
               [ngClass]="{
                 wincell: game.winningLine === 2 || game.winningLine === 4,
-                cannotuse: game.currentBoard.pos3 !== ''
+                cannotuse:
+                  game.currentBoard.pos3 !== '' || filledPositions === 8
               }"
-              [disabled]="game.currentBoard.pos3 !== ''"
+              [disabled]="
+                game.currentBoard.pos3 !== '' || filledPositions === 8
+              "
             >
               {{ game.currentBoard.pos3 }}
             </button>
@@ -109,9 +121,12 @@
                   game.winningLine === 5 ||
                   game.winningLine === 7 ||
                   game.winningLine === 8,
-                cannotuse: game.currentBoard.pos4 !== ''
+                cannotuse:
+                  game.currentBoard.pos4 !== '' || filledPositions === 8
               }"
-              [disabled]="game.currentBoard.pos4 !== ''"
+              [disabled]="
+                game.currentBoard.pos4 !== '' || filledPositions === 8
+              "
             >
               {{ game.currentBoard.pos4 }}
             </button>
@@ -124,9 +139,12 @@
               (click)="positionButtonClicked(5)"
               [ngClass]="{
                 wincell: game.winningLine === 2 || game.winningLine === 6,
-                cannotuse: game.currentBoard.pos5 !== ''
+                cannotuse:
+                  game.currentBoard.pos5 !== '' || filledPositions === 8
               }"
-              [disabled]="game.currentBoard.pos5 !== ''"
+              [disabled]="
+                game.currentBoard.pos5 !== '' || filledPositions === 8
+              "
             >
               {{ game.currentBoard.pos5 }}
             </button>
@@ -144,9 +162,12 @@
                   game.winningLine === 3 ||
                   game.winningLine === 4 ||
                   game.winningLine === 8,
-                cannotuse: game.currentBoard.pos6 !== ''
+                cannotuse:
+                  game.currentBoard.pos6 !== '' || filledPositions === 8
               }"
-              [disabled]="game.currentBoard.pos6 !== ''"
+              [disabled]="
+                game.currentBoard.pos6 !== '' || filledPositions === 8
+              "
             >
               {{ game.currentBoard.pos6 }}
             </button>
@@ -159,9 +180,12 @@
               (click)="positionButtonClicked(7)"
               [ngClass]="{
                 wincell: game.winningLine === 3 || game.winningLine === 5,
-                cannotuse: game.currentBoard.pos7 !== ''
+                cannotuse:
+                  game.currentBoard.pos7 !== '' || filledPositions === 8
               }"
-              [disabled]="game.currentBoard.pos7 !== ''"
+              [disabled]="
+                game.currentBoard.pos7 !== '' || filledPositions === 8
+              "
             >
               {{ game.currentBoard.pos7 }}
             </button>
@@ -177,9 +201,12 @@
                   game.winningLine === 3 ||
                   game.winningLine === 6 ||
                   game.winningLine === 7,
-                cannotuse: game.currentBoard.pos8 !== ''
+                cannotuse:
+                  game.currentBoard.pos8 !== '' || filledPositions === 8
               }"
-              [disabled]="game.currentBoard.pos8 !== ''"
+              [disabled]="
+                game.currentBoard.pos8 !== '' || filledPositions === 8
+              "
             >
               {{ game.currentBoard.pos8 }}
             </button>
@@ -202,7 +229,7 @@
   <div class="col-4" *ngIf="opponentSelected">
     <div>Row for Scoreboard</div>
     <br /><br />
-    <div>Row for Messages</div>
+    <app-messages></app-messages>
   </div>
 
   <!-- <div class="col-2 col-md-2" *ngIf="opponentSelected">

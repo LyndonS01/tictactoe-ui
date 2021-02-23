@@ -10,7 +10,7 @@ export interface IGame {
   currentBoard: ICurrentBoard;
 }
 
-interface ICurrentBoard {
+export interface ICurrentBoard {
   boardId: number;
   p1Symbol: string;
   p2Symbol: string;
