@@ -73,7 +73,6 @@ describe('CellsComponent', () => {
   let service1: GameService;
   let service2: MessagesService;
   let mockMessagesService: any;
-  // let component2: MessagesService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -81,7 +80,6 @@ describe('CellsComponent', () => {
       declarations: [CellsComponent],
       providers: [
         { provide: GameService, useClass: MockService },
-        // { provide: MessagesService, useValue: mockMessagesService },
         { provide: MessagesService, useClass: MessagesService },
       ],
     }).compileComponents();
@@ -92,8 +90,6 @@ describe('CellsComponent', () => {
     component = fixture.componentInstance;
     service1 = TestBed.inject(GameService);
     service2 = TestBed.inject(MessagesService);
-
-    mockMessagesService = jasmine.createSpyObj(['add', 'clear', 'peek']);
 
     fixture.detectChanges();
   });
@@ -154,15 +150,11 @@ describe('CellsComponent', () => {
   });
 
   // checkWinOrDraw with Player 1 as winner
-  // it('should add message that You won', () => {
-  it('should add message that You won', fakeAsync(() => {
+  it('should add message that You won', () => {
     component.winningLine = 1;
     component.username = 'Player 1';
     component.winner = 'Player 1';
     let spyService1 = spyOn(service2, 'add');
-    // let spyService2 = spyOn(service2, 'peek');
-    // mockMessagesService.add('You won the game!');
-    // fixture.detectChanges();
     let board: ICurrentBoard = {
       boardId: 1,
       p1Symbol: 'O',
@@ -179,14 +171,10 @@ describe('CellsComponent', () => {
     };
 
     component.checkWinOrDraw(board);
-    // fixture.detectChanges();
 
     expect(component.checkWinOrDraw(board)).toHaveBeenCalled;
     expect(spyService1).toHaveBeenCalled();
-    // expect(mockMessagesService.add).toHaveBeenCalled();
-    // expect(mockMessagesService.peek()).toBe('You won the game!');
-    // });
-  }));
+  });
 
   // checkWinOrDraw with Computer as winner
   it('should add message that the computer won', () => {
@@ -194,7 +182,6 @@ describe('CellsComponent', () => {
     component.username = 'Player 1';
     component.winner = 'Computer';
     let spyService1 = spyOn(service2, 'add');
-    // let spyService2 = spyOn(service2, 'peek');
     let board: ICurrentBoard = {
       boardId: 1,
       p1Symbol: 'O',
@@ -213,7 +200,6 @@ describe('CellsComponent', () => {
 
     expect(component.checkWinOrDraw(board)).toHaveBeenCalled;
     expect(spyService1).toHaveBeenCalled();
-    // expect(service2.messages[0]).toBe('The computer won the game!');
   });
 
   // checkWinOrDraw with one position left
@@ -237,12 +223,9 @@ describe('CellsComponent', () => {
       pos8: '',
     };
     let spyService1 = spyOn(service2, 'add');
-    // let spyService2 = spyOn(service2, 'peek');
 
     component.checkWinOrDraw(board);
 
     expect(component.checkWinOrDraw(board)).toHaveBeenCalled;
-    // expect(spyService1).toHaveBeenCalled();
-    // expect(service2.messages[0]).toBe('This game is a draw');
   });
 });
