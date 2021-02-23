@@ -55,6 +55,7 @@ export class CellsComponent implements OnInit {
   resetButtonClicked(): void {
     this.opponent = '';
     this.opponentSelected = false;
+    this.filledPositions = 0;
     // this.messagesService.clear();
     // console.log(`Message length: ${this.messagesService.messages.length}`);
   }
