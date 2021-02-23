@@ -39,8 +39,10 @@
                 wincell:
                   game.winningLine === 1 ||
                   game.winningLine === 4 ||
-                  game.winningLine === 7
+                  game.winningLine === 7,
+                cannotuse: game.currentBoard.pos0 !== ''
               }"
+              [disabled]="game.currentBoard.pos0 !== ''"
             >
               {{ game.currentBoard.pos0 }}
             </button>
@@ -52,8 +54,10 @@
               id="cell1"
               (click)="positionButtonClicked(1)"
               [ngClass]="{
-                wincell: game.winningLine === 1 || game.winningLine === 5
+                wincell: game.winningLine === 1 || game.winningLine === 5,
+                cannotuse: game.currentBoard.pos1 !== ''
               }"
+              [disabled]="game.currentBoard.pos1 !== ''"
             >
               {{ game.currentBoard.pos1 }}
             </button>
@@ -68,8 +72,10 @@
                 wincell:
                   game.winningLine === 1 ||
                   game.winningLine === 4 ||
-                  game.winningLine === 8
+                  game.winningLine === 8,
+                cannotuse: game.currentBoard.pos2 !== ''
               }"
+              [disabled]="game.currentBoard.pos2 !== ''"
             >
               {{ game.currentBoard.pos2 }}
             </button>
@@ -83,8 +89,10 @@
               id="cell3"
               (click)="positionButtonClicked(3)"
               [ngClass]="{
-                wincell: game.winningLine === 2 || game.winningLine === 4
+                wincell: game.winningLine === 2 || game.winningLine === 4,
+                cannotuse: game.currentBoard.pos3 !== ''
               }"
+              [disabled]="game.currentBoard.pos3 !== ''"
             >
               {{ game.currentBoard.pos3 }}
             </button>
@@ -100,8 +108,10 @@
                   game.winningLine === 2 ||
                   game.winningLine === 5 ||
                   game.winningLine === 7 ||
-                  game.winningLine === 8
+                  game.winningLine === 8,
+                cannotuse: game.currentBoard.pos4 !== ''
               }"
+              [disabled]="game.currentBoard.pos4 !== ''"
             >
               {{ game.currentBoard.pos4 }}
             </button>
@@ -113,8 +123,10 @@
               id="cell5"
               (click)="positionButtonClicked(5)"
               [ngClass]="{
-                wincell: game.winningLine === 2 || game.winningLine === 6
+                wincell: game.winningLine === 2 || game.winningLine === 6,
+                cannotuse: game.currentBoard.pos5 !== ''
               }"
+              [disabled]="game.currentBoard.pos5 !== ''"
             >
               {{ game.currentBoard.pos5 }}
             </button>
@@ -131,8 +143,10 @@
                 wincell:
                   game.winningLine === 3 ||
                   game.winningLine === 4 ||
-                  game.winningLine === 8
+                  game.winningLine === 8,
+                cannotuse: game.currentBoard.pos6 !== ''
               }"
+              [disabled]="game.currentBoard.pos6 !== ''"
             >
               {{ game.currentBoard.pos6 }}
             </button>
@@ -144,8 +158,10 @@
               id="cell7"
               (click)="positionButtonClicked(7)"
               [ngClass]="{
-                wincell: game.winningLine === 3 || game.winningLine === 5
+                wincell: game.winningLine === 3 || game.winningLine === 5,
+                cannotuse: game.currentBoard.pos7 !== ''
               }"
+              [disabled]="game.currentBoard.pos7 !== ''"
             >
               {{ game.currentBoard.pos7 }}
             </button>
@@ -160,8 +176,10 @@
                 wincell:
                   game.winningLine === 3 ||
                   game.winningLine === 6 ||
-                  game.winningLine === 7
+                  game.winningLine === 7,
+                cannotuse: game.currentBoard.pos8 !== ''
               }"
+              [disabled]="game.currentBoard.pos8 !== ''"
             >
               {{ game.currentBoard.pos8 }}
             </button>
