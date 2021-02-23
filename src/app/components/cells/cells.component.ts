@@ -51,9 +51,7 @@ export class CellsComponent implements OnInit {
 
   positionButtonClicked(position: number): void {
     if (this.gameId > 0) {
-      // extract element ID and position value
-      // let id = (<HTMLInputElement>document.getElementById('cell' + position)).value;
-      this.position = +position;
+      this.position = position;
       let moveParams: MoveModel = {
         username: this.username,
         gameId: this.gameId,

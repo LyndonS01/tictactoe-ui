@@ -91,7 +91,7 @@ describe('GameService', () => {
     });
   });
 
-  describe('#sendNewMove', () => {
+  describe('#sendMove', () => {
     it('it should send move and receive the updated game', () => {
       let testParams = new MoveModel('Player 1', 1, 4);
       let testResponse = {

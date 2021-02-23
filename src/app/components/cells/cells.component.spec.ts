@@ -159,12 +159,24 @@ describe('CellsComponent', () => {
   });
 
   // click on a cell sends update to game server
-  it('should send update to game server', () => {
-    component.positionButtonClicked(4);
-    spyOn(service1, 'sendMove').and.returnValue(of<IGame>());
+  it('should send update to game server when gameId is valid', () => {
+    // let spyComponent = spyOn(component, 'positionButtonClicked');
 
-    // expect(service1.sendMove).toHaveBeenCalled();
-    expect(component.username).toEqual('Player 1');
-    // expect(component.game?.currentBoard.pos4).toEqual('O');
+    component.gameId = 1;
+
+    component.positionButtonClicked(4);
+
+    // expect(component.positionButtonClicked).toHaveBeenCalled();
+    expect(component.position).toEqual(4);
+  });
+
+  it('should send not update game server when gameId is not valid', () => {
+    let spyService = spyOn(service1, 'sendMove');
+
+    component.gameId = 0;
+    component.positionButtonClicked(4);
+
+    expect(component.position).toEqual(0);
+    expect(spyService).not.toHaveBeenCalled();
   });
 });
