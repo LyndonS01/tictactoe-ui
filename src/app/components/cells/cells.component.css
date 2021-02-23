@@ -48,8 +48,8 @@ td {
   height: 33%;
 }
 .cell {
-  font-size: 3.4em;
-  font-size: 16vmin; /* Responsive font size! Awesome! */
+  font-size: 5em;
+  /* font-size: 16vmin; */
   height: 100%; /* Fill the container (td) */
   width: 100%;
 }
