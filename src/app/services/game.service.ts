@@ -6,14 +6,19 @@ import { NewGameModel } from '../models/newGameModel';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, tap, map } from 'rxjs/operators';
 import { MoveModel } from '../models/moveModel';
+import { MessagesService } from './messages.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GameService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private messagesService: MessagesService
+  ) {}
 
   newGame(newGameParams: NewGameModel): Observable<IGame> {
+    this.messagesService.add('Initializing game with game server...');
     return this.http
       .post<IGame>(
         `${environment.game.baseurl}${environment.game.endpoint}${environment.game.new}`,
