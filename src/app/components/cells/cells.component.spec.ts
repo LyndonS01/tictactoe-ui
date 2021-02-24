@@ -13,7 +13,7 @@ import { CellsComponent } from './cells.component';
 
 class MockService {
   newGame(newGame: NewGameModel): Observable<IGame> {
-    let returnedGame: IGame = {
+    const returnedGame: IGame = {
       gameId: 1,
       player1: 'Player 1',
       player2: 'Computer',
@@ -40,7 +40,7 @@ class MockService {
   }
 
   sendMove(moveParams: MoveModel): Observable<IGame> {
-    let returnedGame: IGame = {
+    const returnedGame: IGame = {
       gameId: 1,
       player1: 'Player 1',
       player2: 'Computer',
@@ -140,7 +140,7 @@ describe('CellsComponent', () => {
   });
 
   it('should send not update game server when gameId is not valid', () => {
-    let spyService = spyOn(service1, 'sendMove');
+    const spyService = spyOn(service1, 'sendMove');
 
     component.gameId = 0;
     component.positionButtonClicked(4);
@@ -154,8 +154,8 @@ describe('CellsComponent', () => {
     component.winningLine = 1;
     component.username = 'Player 1';
     component.winner = 'Player 1';
-    let spyService1 = spyOn(service2, 'add');
-    let board: ICurrentBoard = {
+    const spyService1 = spyOn(service2, 'add');
+    const board: ICurrentBoard = {
       boardId: 1,
       p1Symbol: 'O',
       p2Symbol: 'X',
@@ -172,7 +172,7 @@ describe('CellsComponent', () => {
 
     component.checkWinOrDraw(board);
 
-    expect(component.checkWinOrDraw(board)).toHaveBeenCalled;
+    const out = expect(component.checkWinOrDraw(board)).toHaveBeenCalled;
     expect(spyService1).toHaveBeenCalled();
   });
 
@@ -181,8 +181,8 @@ describe('CellsComponent', () => {
     component.winningLine = 1;
     component.username = 'Player 1';
     component.winner = 'Computer';
-    let spyService1 = spyOn(service2, 'add');
-    let board: ICurrentBoard = {
+    const spyService1 = spyOn(service2, 'add');
+    const board: ICurrentBoard = {
       boardId: 1,
       p1Symbol: 'O',
       p2Symbol: 'X',
@@ -198,7 +198,7 @@ describe('CellsComponent', () => {
     };
     component.checkWinOrDraw(board);
 
-    expect(component.checkWinOrDraw(board)).toHaveBeenCalled;
+    const out = expect(component.checkWinOrDraw(board)).toHaveBeenCalled;
     expect(spyService1).toHaveBeenCalled();
   });
 
@@ -208,7 +208,7 @@ describe('CellsComponent', () => {
     component.username = 'Player 1';
     component.winner = '';
 
-    let board: ICurrentBoard = {
+    const board: ICurrentBoard = {
       boardId: 1,
       p1Symbol: 'O',
       p2Symbol: 'X',
@@ -222,10 +222,11 @@ describe('CellsComponent', () => {
       pos7: 'O',
       pos8: '',
     };
-    let spyService1 = spyOn(service2, 'add');
+    const spyService1 = spyOn(service2, 'add');
 
     component.checkWinOrDraw(board);
 
-    expect(component.checkWinOrDraw(board)).toHaveBeenCalled;
+    const out1 = expect(component.checkWinOrDraw(board)).toHaveBeenCalled;
+    const out2 = expect(spyService1).toHaveBeenCalled;
   });
 });
