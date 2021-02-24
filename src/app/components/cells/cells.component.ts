@@ -56,6 +56,7 @@ export class CellsComponent implements OnInit {
     this.opponent = '';
     this.opponentSelected = false;
     this.filledPositions = 0;
+    this.winner = '';
     // this.messagesService.clear();
     // console.log(`Message length: ${this.messagesService.messages.length}`);
   }
