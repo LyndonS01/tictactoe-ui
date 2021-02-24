@@ -35,6 +35,6 @@ describe('MessagesService', () => {
 
     service.clear();
 
-    expect(service.messages.length).toBe(0);
+    const out = expect(service.messages.length).toBe(0);
   });
 });
