@@ -41,10 +41,14 @@
                   game.winningLine === 4 ||
                   game.winningLine === 7,
                 cannotuse:
-                  game.currentBoard.pos0 !== '' || filledPositions === 8
+                  game.currentBoard.pos0 !== '' ||
+                  filledPositions === 8 ||
+                  winner !== ''
               }"
               [disabled]="
-                game.currentBoard.pos0 !== '' || filledPositions === 8
+                game.currentBoard.pos0 !== '' ||
+                filledPositions === 8 ||
+                winner !== ''
               "
             >
               {{ game.currentBoard.pos0 }}
@@ -59,10 +63,14 @@
               [ngClass]="{
                 wincell: game.winningLine === 1 || game.winningLine === 5,
                 cannotuse:
-                  game.currentBoard.pos1 !== '' || filledPositions === 8
+                  game.currentBoard.pos1 !== '' ||
+                  filledPositions === 8 ||
+                  winner !== ''
               }"
               [disabled]="
-                game.currentBoard.pos1 !== '' || filledPositions === 8
+                game.currentBoard.pos1 !== '' ||
+                filledPositions === 8 ||
+                winner !== ''
               "
             >
               {{ game.currentBoard.pos1 }}
@@ -80,10 +88,14 @@
                   game.winningLine === 6 ||
                   game.winningLine === 8,
                 cannotuse:
-                  game.currentBoard.pos2 !== '' || filledPositions === 8
+                  game.currentBoard.pos2 !== '' ||
+                  filledPositions === 8 ||
+                  winner !== ''
               }"
               [disabled]="
-                game.currentBoard.pos2 !== '' || filledPositions === 8
+                game.currentBoard.pos2 !== '' ||
+                filledPositions === 8 ||
+                winner !== ''
               "
             >
               {{ game.currentBoard.pos2 }}
@@ -100,10 +112,14 @@
               [ngClass]="{
                 wincell: game.winningLine === 2 || game.winningLine === 4,
                 cannotuse:
-                  game.currentBoard.pos3 !== '' || filledPositions === 8
+                  game.currentBoard.pos3 !== '' ||
+                  filledPositions === 8 ||
+                  winner !== ''
               }"
               [disabled]="
-                game.currentBoard.pos3 !== '' || filledPositions === 8
+                game.currentBoard.pos3 !== '' ||
+                filledPositions === 8 ||
+                winner !== ''
               "
             >
               {{ game.currentBoard.pos3 }}
@@ -122,10 +138,14 @@
                   game.winningLine === 7 ||
                   game.winningLine === 8,
                 cannotuse:
-                  game.currentBoard.pos4 !== '' || filledPositions === 8
+                  game.currentBoard.pos4 !== '' ||
+                  filledPositions === 8 ||
+                  winner !== ''
               }"
               [disabled]="
-                game.currentBoard.pos4 !== '' || filledPositions === 8
+                game.currentBoard.pos4 !== '' ||
+                filledPositions === 8 ||
+                winner !== ''
               "
             >
               {{ game.currentBoard.pos4 }}
@@ -140,10 +160,14 @@
               [ngClass]="{
                 wincell: game.winningLine === 2 || game.winningLine === 6,
                 cannotuse:
-                  game.currentBoard.pos5 !== '' || filledPositions === 8
+                  game.currentBoard.pos5 !== '' ||
+                  filledPositions === 8 ||
+                  winner !== ''
               }"
               [disabled]="
-                game.currentBoard.pos5 !== '' || filledPositions === 8
+                game.currentBoard.pos5 !== '' ||
+                filledPositions === 8 ||
+                winner !== ''
               "
             >
               {{ game.currentBoard.pos5 }}
@@ -163,10 +187,14 @@
                   game.winningLine === 4 ||
                   game.winningLine === 8,
                 cannotuse:
-                  game.currentBoard.pos6 !== '' || filledPositions === 8
+                  game.currentBoard.pos6 !== '' ||
+                  filledPositions === 8 ||
+                  winner !== ''
               }"
               [disabled]="
-                game.currentBoard.pos6 !== '' || filledPositions === 8
+                game.currentBoard.pos6 !== '' ||
+                filledPositions === 8 ||
+                winner !== ''
               "
             >
               {{ game.currentBoard.pos6 }}
@@ -181,10 +209,14 @@
               [ngClass]="{
                 wincell: game.winningLine === 3 || game.winningLine === 5,
                 cannotuse:
-                  game.currentBoard.pos7 !== '' || filledPositions === 8
+                  game.currentBoard.pos7 !== '' ||
+                  filledPositions === 8 ||
+                  winner !== ''
               }"
               [disabled]="
-                game.currentBoard.pos7 !== '' || filledPositions === 8
+                game.currentBoard.pos7 !== '' ||
+                filledPositions === 8 ||
+                winner !== ''
               "
             >
               {{ game.currentBoard.pos7 }}
@@ -202,10 +234,14 @@
                   game.winningLine === 6 ||
                   game.winningLine === 7,
                 cannotuse:
-                  game.currentBoard.pos8 !== '' || filledPositions === 8
+                  game.currentBoard.pos8 !== '' ||
+                  filledPositions === 8 ||
+                  winner !== ''
               }"
               [disabled]="
-                game.currentBoard.pos8 !== '' || filledPositions === 8
+                game.currentBoard.pos8 !== '' ||
+                filledPositions === 8 ||
+                winner !== ''
               "
             >
               {{ game.currentBoard.pos8 }}
