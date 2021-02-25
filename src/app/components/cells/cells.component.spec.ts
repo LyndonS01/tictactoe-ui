@@ -139,7 +139,7 @@ describe('CellsComponent', () => {
     expect(component.position).toEqual(4);
   });
 
-  it('should send not update game server when gameId is not valid', () => {
+  it('should not send update game server when gameId is not valid', () => {
     const spyService = spyOn(service1, 'sendMove');
 
     component.gameId = 0;
