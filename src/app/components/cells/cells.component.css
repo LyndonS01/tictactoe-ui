@@ -53,12 +53,14 @@ td {
   height: 100%; /* Fill the container (td) */
   width: 100%;
 }
+
 .wincell {
   background-color: #c88; /* Red background to highlight the "winning" line */
 }
-.player-two {
+
+/* .player-two {
   color: #933;
-}
+} */
 
 /****** BUTTONS ******/
 
@@ -68,13 +70,12 @@ button {
   color: #333;
 }
 
-#restart {
+/* #restart {
   font-size: 1.2em;
   padding: 5px 10px;
-  /* Center horizontally */
   margin: 20px auto;
   display: block;
-}
+} */
 
 .choose,
 #restart {

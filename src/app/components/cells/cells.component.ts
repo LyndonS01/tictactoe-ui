@@ -43,7 +43,7 @@ export class CellsComponent implements OnInit {
     };
 
     this.messagesService.add('Your opponent is the game server');
-    this.messagesService.add(`Your move, ${this.username}`);
+    this.messagesService.add(`Your move, ${this.username} (O)`);
     this.gameService.newGame(newGameParams).subscribe({
       next: (game) => {
         (this.game = game), (this.gameId = game.gameId);
@@ -96,7 +96,7 @@ export class CellsComponent implements OnInit {
         }
       }
       this.messagesService.add(`${winningPlayer} won the game!`);
-    } else if (this.winningLine == 0) {
+    } else {
       // There is no winner yet. If one position is left, then game is drawn.
       let filledPositions = 0;
       if (currentBoard.pos0 !== '') filledPositions++;
@@ -111,7 +111,10 @@ export class CellsComponent implements OnInit {
       this.filledPositions = filledPositions;
       if (filledPositions === 8) {
         this.messagesService.add(`This game is a draw`);
-      }
-    } else this.messagesService.add(`Your move, ${this.game?.nextMove}`);
+      } else
+        this.messagesService.add(
+          `Your move, ${this.game?.nextMove} (${this.game?.currentBoard.p1Symbol})`
+        );
+    }
   }
 }
