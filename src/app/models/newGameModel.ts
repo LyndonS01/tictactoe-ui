@@ -1,6 +1,6 @@
 export class NewGameModel {
-  username: string = '';
-  opponent: string = '';
+  username = '';
+  opponent = '';
 
   constructor(username: string, opponent: string) {
     this.username = username;

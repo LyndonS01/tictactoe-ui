@@ -72,7 +72,7 @@ describe('CellsComponent', () => {
   let fixture: ComponentFixture<CellsComponent>;
   let service1: GameService;
   let service2: MessagesService;
-  let mockMessagesService: any;
+  // let mockMessagesService: any;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

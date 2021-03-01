@@ -13,9 +13,9 @@ import { MoveModel } from '../models/moveModel';
 describe('GameService', () => {
   let service: GameService;
   let httpMock: HttpTestingController;
-  let injector: TestBed;
+  // let injector: TestBed;
 
-  let game: IGame = {
+  const game: IGame = {
     gameId: 1,
     player1: 'Player 1',
     player2: 'Computer',
@@ -41,8 +41,9 @@ describe('GameService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({ imports: [HttpClientTestingModule] });
     service = TestBed.inject(GameService);
-    injector = getTestBed();
-    httpMock = injector.get(HttpTestingController);
+    // injector = getTestBed();
+    // httpMock = injector.get(HttpTestingController);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   it('should be created', () => {
@@ -55,8 +56,8 @@ describe('GameService', () => {
 
   describe('#createNewGame', () => {
     it('it should create expected game', () => {
-      let testParams = new NewGameModel('Player 1', 'Computer');
-      let testResponse = {
+      const testParams = new NewGameModel('Player 1', 'Computer');
+      const testResponse = {
         gameId: 1,
         player1: 'Player 1',
         player2: 'Computer',
@@ -93,8 +94,8 @@ describe('GameService', () => {
 
   describe('#sendMove', () => {
     it('it should send move and receive the updated game', () => {
-      let testParams = new MoveModel('Player 1', 1, 4);
-      let testResponse = {
+      const testParams = new MoveModel('Player 1', 1, 4);
+      const testResponse = {
         gameId: 1,
         player1: 'Player 1',
         player2: 'Computer',

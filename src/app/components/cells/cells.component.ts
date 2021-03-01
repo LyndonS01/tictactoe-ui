@@ -11,16 +11,16 @@ import { MessagesService } from 'src/app/services/messages.service';
   styleUrls: ['./cells.component.css'],
 })
 export class CellsComponent implements OnInit {
-  username: string = 'Player 1';
-  opponent: string = '';
-  gameId: number = 0;
-  position: number = 0;
-  winningLine: number = 0;
-  winner: string = '';
+  username = 'Player 1';
+  opponent = '';
+  gameId = 0;
+  position = 0;
+  winningLine = 0;
+  winner = '';
   errorMessage = '';
-  opponentSelected: boolean = false;
+  opponentSelected = false;
   game: IGame | undefined;
-  filledPositions: number = 0;
+  filledPositions = 0;
 
   constructor(
     private gameService: GameService,
@@ -37,7 +37,7 @@ export class CellsComponent implements OnInit {
   cpuButtonClicked(): void {
     this.opponent = 'Computer';
     this.opponentSelected = true;
-    let newGameParams: NewGameModel = {
+    const newGameParams: NewGameModel = {
       username: this.username,
       opponent: this.opponent,
     };
@@ -64,7 +64,7 @@ export class CellsComponent implements OnInit {
   positionButtonClicked(position: number): void {
     if (this.gameId > 0) {
       this.position = position;
-      let moveParams: MoveModel = {
+      const moveParams: MoveModel = {
         username: this.username,
         gameId: this.gameId,
         position: this.position,
@@ -85,7 +85,7 @@ export class CellsComponent implements OnInit {
 
   // check for win or draw here
   checkWinOrDraw(currentBoard: ICurrentBoard): void {
-    //check for win conditions
+    // check for win conditions
     if (this.winningLine > 0) {
       let winningPlayer = 'You';
       if (this.winner !== this.game?.player1) {
@@ -99,22 +99,41 @@ export class CellsComponent implements OnInit {
     } else {
       // There is no winner yet. If one position is left, then game is drawn.
       let filledPositions = 0;
-      if (currentBoard.pos0 !== '') filledPositions++;
-      if (currentBoard.pos1 !== '') filledPositions++;
-      if (currentBoard.pos2 !== '') filledPositions++;
-      if (currentBoard.pos3 !== '') filledPositions++;
-      if (currentBoard.pos4 !== '') filledPositions++;
-      if (currentBoard.pos5 !== '') filledPositions++;
-      if (currentBoard.pos6 !== '') filledPositions++;
-      if (currentBoard.pos7 !== '') filledPositions++;
-      if (currentBoard.pos8 !== '') filledPositions++;
+      if (currentBoard.pos0 !== '') {
+        filledPositions++;
+      }
+      if (currentBoard.pos1 !== '') {
+        filledPositions++;
+      }
+      if (currentBoard.pos2 !== '') {
+        filledPositions++;
+      }
+      if (currentBoard.pos3 !== '') {
+        filledPositions++;
+      }
+      if (currentBoard.pos4 !== '') {
+        filledPositions++;
+      }
+      if (currentBoard.pos5 !== '') {
+        filledPositions++;
+      }
+      if (currentBoard.pos6 !== '') {
+        filledPositions++;
+      }
+      if (currentBoard.pos7 !== '') {
+        filledPositions++;
+      }
+      if (currentBoard.pos8 !== '') {
+        filledPositions++;
+      }
       this.filledPositions = filledPositions;
       if (filledPositions === 8) {
         this.messagesService.add(`This game is a draw`);
-      } else
+      } else {
         this.messagesService.add(
           `Your move, ${this.game?.nextMove} (${this.game?.currentBoard.p1Symbol})`
         );
+      }
     }
   }
 }
