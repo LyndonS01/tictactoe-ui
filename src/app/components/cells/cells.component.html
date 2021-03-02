@@ -4,7 +4,7 @@
   <button type="button" id="choose-o" class="choose">O</button>
 </div> -->
 
-<div id="enemy-screen" class="center" *ngIf="!opponentSelected">
+<div id="enemy-screen" class="center" *ngIf="!opponentTypeSelected">
   <h2>Play against:</h2>
   <button
     type="button"
@@ -25,7 +25,7 @@
 </div>
 
 <div class="row">
-  <div class="col-8" *ngIf="opponentSelected">
+  <div class="col-8" *ngIf="opponentTypeSelected">
     <div id="game-screen">
       <table class="table table-bordered center" *ngIf="game">
         <tr>
@@ -262,13 +262,13 @@
     </button>
   </div>
 
-  <div class="col-4" *ngIf="opponentSelected">
+  <div class="col-4" *ngIf="opponentTypeSelected">
     <!-- <div class="text-left">Row for Scoreboard</div>
     <br /><br /> -->
     <app-messages></app-messages>
   </div>
 
-  <!-- <div class="col-2 col-md-2" *ngIf="opponentSelected">
+  <!-- <div class="col-2 col-md-2" *ngIf="opponentTypeSelected">
     Column for Scoreboard
   </div> -->
 </div>

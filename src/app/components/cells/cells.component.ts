@@ -18,7 +18,7 @@ export class CellsComponent implements OnInit {
   winningLine = 0;
   winner = '';
   errorMessage = '';
-  opponentSelected = false;
+  opponentTypeSelected = false;
   game: IGame | undefined;
   filledPositions = 0;
   humanOpponent = false;
@@ -31,14 +31,29 @@ export class CellsComponent implements OnInit {
   ngOnInit(): void {}
 
   humanButtonClicked(): void {
-    this.opponent = 'Human';
-    this.opponentSelected = true;
+    this.opponent = '';
+    this.opponentTypeSelected = true;
     this.humanOpponent = true;
+    const newGameParams: NewGameModel = {
+      username: this.username,
+      opponent: this.opponent,
+    };
+
+    // this.messagesService.add('Wait for Player 2 to join & move after you move');
+    this.messagesService.add(`Your move, ${this.username} (O)`);
+    this.gameService.newGame(newGameParams).subscribe({
+      next: (game) => {
+        (this.game = game),
+          (this.gameId = game.gameId),
+          (this.opponent = game.player2);
+      },
+      // error: (err) => (this.errorMessage = err),
+    });
   }
 
   cpuButtonClicked(): void {
     this.opponent = 'Computer';
-    this.opponentSelected = true;
+    this.opponentTypeSelected = true;
     const newGameParams: NewGameModel = {
       username: this.username,
       opponent: this.opponent,
@@ -56,7 +71,7 @@ export class CellsComponent implements OnInit {
 
   resetButtonClicked(): void {
     this.opponent = '';
-    this.opponentSelected = false;
+    this.opponentTypeSelected = false;
     this.filledPositions = 0;
     this.winner = '';
     this.messagesService.clear();

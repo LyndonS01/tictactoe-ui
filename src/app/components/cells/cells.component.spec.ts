@@ -72,7 +72,6 @@ describe('CellsComponent', () => {
   let fixture: ComponentFixture<CellsComponent>;
   let service1: GameService;
   let service2: MessagesService;
-  // let mockMessagesService: any;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -98,16 +97,16 @@ describe('CellsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // click on Human saves Human as opponent
-  it('should save human as opponent', () => {
+  // click on Human saves Player 2 as opponent
+  it('should set humanOpponent to true', () => {
     expect(component.opponent).toEqual('');
-    expect(component.opponentSelected).toBe(false);
+    expect(component.opponentTypeSelected).toBe(false);
     expect(component.humanOpponent).toBe(false);
 
     component.humanButtonClicked();
 
-    expect(component.opponentSelected).toBe(true);
-    expect(component.opponent).toEqual('Human');
+    expect(component.opponentTypeSelected).toBe(true);
+    // expect(component.opponent).toEqual('');
     expect(component.humanOpponent).toBe(true);
   });
 
@@ -115,12 +114,12 @@ describe('CellsComponent', () => {
   it('should save computer as opponent', () => {
     spyOn(service1, 'newGame').and.returnValue(of());
     expect(component.opponent).toEqual('');
-    expect(component.opponentSelected).toBe(false);
+    expect(component.opponentTypeSelected).toBe(false);
 
     component.cpuButtonClicked();
 
     expect(service1.newGame).toHaveBeenCalled();
-    expect(component.opponentSelected).toBe(true);
+    expect(component.opponentTypeSelected).toBe(true);
     expect(component.opponent).toEqual('Computer');
   });
 
@@ -129,7 +128,7 @@ describe('CellsComponent', () => {
     const spyService = spyOn(service2, 'clear');
     component.resetButtonClicked();
 
-    expect(component.opponentSelected).toBe(false);
+    expect(component.opponentTypeSelected).toBe(false);
     expect(component.opponent).toEqual('');
     expect(component.filledPositions).toEqual(0);
     expect(component.winner).toEqual('');
