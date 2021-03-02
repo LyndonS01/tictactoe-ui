@@ -102,11 +102,13 @@ describe('CellsComponent', () => {
   it('should save human as opponent', () => {
     expect(component.opponent).toEqual('');
     expect(component.opponentSelected).toBe(false);
+    expect(component.humanOpponent).toBe(false);
 
     component.humanButtonClicked();
 
     expect(component.opponentSelected).toBe(true);
     expect(component.opponent).toEqual('Human');
+    expect(component.humanOpponent).toBe(true);
   });
 
   // click on Computer saves Computer as opponent
@@ -123,11 +125,16 @@ describe('CellsComponent', () => {
   });
 
   // click on Reset restarts the game
-  it('should save computer as opponent', () => {
+  it('should reset the game', () => {
+    const spyService = spyOn(service2, 'clear');
     component.resetButtonClicked();
 
     expect(component.opponentSelected).toBe(false);
     expect(component.opponent).toEqual('');
+    expect(component.filledPositions).toEqual(0);
+    expect(component.winner).toEqual('');
+    expect(component.humanOpponent).toBe(false);
+    expect(spyService).toHaveBeenCalled();
   });
 
   // click on a cell sends update to game server

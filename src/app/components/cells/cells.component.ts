@@ -21,6 +21,7 @@ export class CellsComponent implements OnInit {
   opponentSelected = false;
   game: IGame | undefined;
   filledPositions = 0;
+  humanOpponent = false;
 
   constructor(
     private gameService: GameService,
@@ -32,6 +33,7 @@ export class CellsComponent implements OnInit {
   humanButtonClicked(): void {
     this.opponent = 'Human';
     this.opponentSelected = true;
+    this.humanOpponent = true;
   }
 
   cpuButtonClicked(): void {
@@ -58,6 +60,7 @@ export class CellsComponent implements OnInit {
     this.filledPositions = 0;
     this.winner = '';
     this.messagesService.clear();
+    this.humanOpponent = false;
     // console.log(`Message length: ${this.messagesService.messages.length}`);
   }
 
