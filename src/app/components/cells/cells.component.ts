@@ -32,7 +32,10 @@ export class CellsComponent implements OnInit {
     public messagesService: MessagesService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // this.board = new SymbolsModel();
+    // console.log('Board: ' + JSON.stringify(this.board));
+  }
 
   humanButtonClicked(): void {
     this.opponent = '';
@@ -43,8 +46,20 @@ export class CellsComponent implements OnInit {
       opponent: this.opponent,
     };
 
-    // this.messagesService.add('Wait for Player 2 to join & move after you move');
-    this.messagesService.add(`Your move, ${this.username} (O)`);
+    // send the appropriate prompt message
+    let symbol = '';
+    if (this.game !== undefined) {
+      if (this.game.nextMove === this.game.player1) {
+        symbol = this.game.currentBoard.p1Symbol;
+      } else {
+        symbol = this.game.currentBoard.p2Symbol;
+      }
+      this.messagesService.add(`Your move, ${this.game.nextMove} (${symbol})`);
+    } else {
+      // current player is initiating the game
+      this.messagesService.add('Waiting for opponent to join or move...');
+    }
+
     this.gameService.newGame(newGameParams).subscribe({
       next: (game) => {
         (this.game = game),
@@ -88,6 +103,17 @@ export class CellsComponent implements OnInit {
   }
 
   positionButtonClicked(position: number): void {
+    if (this.game !== undefined) {
+      if (this.game.nextMove === this.game.player1) {
+        this.board.symbol[position] = this.game.currentBoard.p1Symbol;
+      } else {
+        this.board.symbol[position] = this.game.currentBoard.p2Symbol;
+      }
+    } else {
+      // current player is initiating the game
+      this.board.symbol[position] = 'O';
+    }
+
     if (this.gameId > 0) {
       this.position = position;
       const moveParams: MoveModel = {
@@ -157,9 +183,13 @@ export class CellsComponent implements OnInit {
       if (filledPositions === 8) {
         this.messagesService.add(`This game is a draw`);
       } else {
-        this.messagesService.add(
-          `Your move, ${this.game?.nextMove} (${this.game?.currentBoard.p1Symbol})`
-        );
+        if (!this.humanOpponent) {
+          this.messagesService.add(
+            `Your move, ${this.game?.nextMove} (${this.game?.currentBoard.p1Symbol})`
+          );
+        } else {
+          this.messagesService.add('Waiting for opponent to join or move...');
+        }
       }
     }
   }
