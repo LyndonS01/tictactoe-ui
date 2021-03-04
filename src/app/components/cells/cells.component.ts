@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { ICurrentBoard, IGame } from 'src/app/models/game';
 import { MoveModel } from 'src/app/models/moveModel';
 import { NewGameModel } from 'src/app/models/newGameModel';
+import { SymbolsModel } from 'src/app/models/symbolsModel';
 import { GameService } from 'src/app/services/game.service';
 import { MessagesService } from 'src/app/services/messages.service';
 
@@ -19,9 +21,11 @@ export class CellsComponent implements OnInit {
   winner = '';
   errorMessage = '';
   opponentTypeSelected = false;
+  playerSelected = false;
   game: IGame | undefined;
   filledPositions = 0;
   humanOpponent = false;
+  board = new SymbolsModel();
 
   constructor(
     private gameService: GameService,
@@ -45,7 +49,8 @@ export class CellsComponent implements OnInit {
       next: (game) => {
         (this.game = game),
           (this.gameId = game.gameId),
-          (this.opponent = game.player2);
+          (this.opponent = game.player2),
+          this.copyBoard(game.currentBoard);
       },
       // error: (err) => (this.errorMessage = err),
     });
@@ -63,7 +68,9 @@ export class CellsComponent implements OnInit {
     this.messagesService.add(`Your move, ${this.username} (O)`);
     this.gameService.newGame(newGameParams).subscribe({
       next: (game) => {
-        (this.game = game), (this.gameId = game.gameId);
+        (this.game = game),
+          (this.gameId = game.gameId),
+          this.copyBoard(game.currentBoard);
       },
       // error: (err) => (this.errorMessage = err),
     });
@@ -72,6 +79,7 @@ export class CellsComponent implements OnInit {
   resetButtonClicked(): void {
     this.opponent = '';
     this.opponentTypeSelected = false;
+    this.playerSelected = false;
     this.filledPositions = 0;
     this.winner = '';
     this.messagesService.clear();
@@ -93,8 +101,9 @@ export class CellsComponent implements OnInit {
           (this.game = game),
             (this.gameId = game.gameId),
             (this.winningLine = game.winningLine),
-            (this.winner = game.winner);
-          this.checkWinOrDraw(game.currentBoard);
+            (this.winner = game.winner),
+            this.copyBoard(game.currentBoard),
+            this.checkWinOrDraw(game.currentBoard);
         },
         // error: (err) => (this.errorMessage = err),
       });
@@ -153,5 +162,17 @@ export class CellsComponent implements OnInit {
         );
       }
     }
+  }
+
+  copyBoard(currentBoard: ICurrentBoard): void {
+    this.board.symbol[0] = currentBoard.pos0;
+    this.board.symbol[1] = currentBoard.pos1;
+    this.board.symbol[2] = currentBoard.pos2;
+    this.board.symbol[3] = currentBoard.pos3;
+    this.board.symbol[4] = currentBoard.pos4;
+    this.board.symbol[5] = currentBoard.pos5;
+    this.board.symbol[6] = currentBoard.pos6;
+    this.board.symbol[7] = currentBoard.pos7;
+    this.board.symbol[8] = currentBoard.pos8;
   }
 }
