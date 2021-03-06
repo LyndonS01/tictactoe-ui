@@ -312,7 +312,7 @@ describe('CellsComponent', () => {
     component.humanButtonClicked();
 
     const out = expect(spyService).toHaveBeenCalledWith(
-      'Waiting for opponent to join or move...'
+      `Make your first move, ${component.username} (X)`
     );
   });
 
@@ -341,12 +341,13 @@ describe('CellsComponent', () => {
     };
 
     component.game = sampleGame;
+    component.username = 'Player 1';
     const spyService = spyOn(service2, 'add');
 
     component.humanButtonClicked();
 
     const out = expect(spyService).toHaveBeenCalledWith(
-      'Your move, Player 1 (O)'
+      `Your move, ${component.username} (${sampleGame.currentBoard.p1Symbol})`
     );
   });
 
@@ -375,12 +376,13 @@ describe('CellsComponent', () => {
     };
 
     component.game = sampleGame;
+    component.username = 'Player 2';
     const spyService = spyOn(service2, 'add');
 
     component.humanButtonClicked();
 
     const out = expect(spyService).toHaveBeenCalledWith(
-      'Your move, Player 2 (X)'
+      `Your move, ${component.username} (${sampleGame.currentBoard.p2Symbol})`
     );
   });
 

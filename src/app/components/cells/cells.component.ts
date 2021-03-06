@@ -53,7 +53,7 @@ export class CellsComponent implements OnInit {
       if (this.game.nextMove === this.username) {
         // pick up my symbol
         let symbol;
-        if (this.game.currentBoard.p1Symbol === this.username) {
+        if (this.username === this.game.player1) {
           symbol = this.game.currentBoard.p1Symbol;
         } else {
           symbol = this.game.currentBoard.p2Symbol;
@@ -62,9 +62,9 @@ export class CellsComponent implements OnInit {
           `Your move, ${this.game.nextMove} (${symbol})`
         );
       }
+    } else {
+      this.messagesService.add(`Make your first move, ${this.username} (X)`);
     }
-
-    this.messagesService.add(`Make the first move, ${this.username}`);
 
     this.boardLocked = true;
     this.gameService.newGame(newGameParams).subscribe({
