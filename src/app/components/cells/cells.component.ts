@@ -62,8 +62,6 @@ export class CellsComponent implements OnInit {
           `Your move, ${this.game.nextMove} (${symbol})`
         );
       }
-    } else {
-      this.messagesService.add(`Make your first move, ${this.username} (X)`);
     }
 
     this.boardLocked = true;
@@ -73,7 +71,14 @@ export class CellsComponent implements OnInit {
           (this.gameId = game.gameId),
           (this.opponent = game.player2),
           this.copyBoard(game.currentBoard),
-          this.toggleBoardLock(game);
+          this.toggleBoardLock(game),
+          this.messagesService.add(
+            `Make your first move, ${this.username} (${
+              this.username === this.game.player1
+                ? this.game.currentBoard.p1Symbol
+                : this.game.currentBoard.p2Symbol
+            })`
+          );
       },
       // error: (err) => (this.errorMessage = err),
     });
