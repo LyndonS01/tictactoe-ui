@@ -72,7 +72,6 @@ describe('CellsComponent', () => {
   let fixture: ComponentFixture<CellsComponent>;
   let service1: GameService;
   let service2: MessagesService;
-  // let mockMessagesService: any;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -98,36 +97,43 @@ describe('CellsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // click on Human saves Human as opponent
-  it('should save human as opponent', () => {
+  // click on Human saves Player 2 as opponent
+  it('should set humanOpponent to true', () => {
     expect(component.opponent).toEqual('');
-    expect(component.opponentSelected).toBe(false);
+    expect(component.opponentTypeSelected).toBe(false);
+    expect(component.humanOpponent).toBe(false);
 
     component.humanButtonClicked();
 
-    expect(component.opponentSelected).toBe(true);
-    expect(component.opponent).toEqual('Human');
+    expect(component.opponentTypeSelected).toBe(true);
+    // expect(component.opponent).toEqual('');
+    expect(component.humanOpponent).toBe(true);
   });
 
   // click on Computer saves Computer as opponent
   it('should save computer as opponent', () => {
     spyOn(service1, 'newGame').and.returnValue(of());
     expect(component.opponent).toEqual('');
-    expect(component.opponentSelected).toBe(false);
+    expect(component.opponentTypeSelected).toBe(false);
 
     component.cpuButtonClicked();
 
     expect(service1.newGame).toHaveBeenCalled();
-    expect(component.opponentSelected).toBe(true);
+    expect(component.opponentTypeSelected).toBe(true);
     expect(component.opponent).toEqual('Computer');
   });
 
   // click on Reset restarts the game
-  it('should save computer as opponent', () => {
+  it('should reset the game', () => {
+    const spyService = spyOn(service2, 'clear');
     component.resetButtonClicked();
 
-    expect(component.opponentSelected).toBe(false);
+    expect(component.opponentTypeSelected).toBe(false);
     expect(component.opponent).toEqual('');
+    expect(component.filledPositions).toEqual(0);
+    expect(component.winner).toEqual('');
+    expect(component.humanOpponent).toBe(false);
+    expect(spyService).toHaveBeenCalled();
   });
 
   // click on a cell sends update to game server
@@ -228,5 +234,206 @@ describe('CellsComponent', () => {
 
     const out1 = expect(component.checkWinOrDraw(board)).toHaveBeenCalled;
     const out2 = expect(spyService1).toHaveBeenCalled;
+  });
+
+  it('positionButtonClicked should not update cell clicked when game is undefined', () => {
+    component.game = undefined;
+
+    component.positionButtonClicked(4);
+
+    const out = expect(component.board.symbol[4]).toEqual('O');
+  });
+
+  it('positionButtonClicked should update cell clicked with p1Symbol when game is defined', () => {
+    const sampleGame: IGame = {
+      gameId: 1,
+      player1: 'Player 1',
+      player2: '',
+      nextMove: 'Player 1',
+      winner: '',
+      winningLine: 0,
+      currentBoard: {
+        boardId: 1,
+        p1Symbol: 'O',
+        p2Symbol: 'X',
+        pos0: 'X',
+        pos1: '',
+        pos2: '',
+        pos3: '',
+        pos4: 'O',
+        pos5: '',
+        pos6: '',
+        pos7: '',
+        pos8: '',
+      },
+    };
+    component.game = sampleGame;
+
+    component.positionButtonClicked(5);
+
+    const out = expect(component.board.symbol[5]).toEqual('O');
+  });
+
+  it('positionButtonClicked should update cell clicked with p2Symbol when game is defined', () => {
+    const sampleGame: IGame = {
+      gameId: 1,
+      player1: 'Player 1',
+      player2: 'Player 2',
+      nextMove: 'Player 2',
+      winner: '',
+      winningLine: 0,
+      currentBoard: {
+        boardId: 1,
+        p1Symbol: 'O',
+        p2Symbol: 'X',
+        pos0: 'X',
+        pos1: '',
+        pos2: '',
+        pos3: '',
+        pos4: 'O',
+        pos5: '',
+        pos6: '',
+        pos7: '',
+        pos8: '',
+      },
+    };
+
+    component.game = sampleGame;
+
+    component.positionButtonClicked(5);
+
+    const out = expect(component.board.symbol[5]).toEqual('X');
+  });
+
+  it('humanButtonClicked should give correct message service when game is undefined', () => {
+    const spyService = spyOn(service2, 'add');
+
+    component.game = undefined;
+
+    component.humanButtonClicked();
+
+    const out = expect(spyService).toHaveBeenCalledTimes(1);
+  });
+
+  it('humanButtonClicked should give correct message service when it is player 1"s turn', () => {
+    const sampleGame: IGame = {
+      gameId: 1,
+      player1: 'Player 1',
+      player2: '',
+      nextMove: 'Player 1',
+      winner: '',
+      winningLine: 0,
+      currentBoard: {
+        boardId: 1,
+        p1Symbol: 'O',
+        p2Symbol: 'X',
+        pos0: 'X',
+        pos1: '',
+        pos2: '',
+        pos3: '',
+        pos4: 'O',
+        pos5: '',
+        pos6: '',
+        pos7: '',
+        pos8: '',
+      },
+    };
+
+    component.game = sampleGame;
+    component.username = 'Player 1';
+    const spyService = spyOn(service2, 'add');
+
+    component.humanButtonClicked();
+
+    const out = expect(spyService).toHaveBeenCalledWith(
+      `Your move, ${component.username} (${sampleGame.currentBoard.p1Symbol})`
+    );
+  });
+
+  it('humanButtonClicked should give correct message service when it is player 2"s turn', () => {
+    const sampleGame: IGame = {
+      gameId: 1,
+      player1: 'Player 1',
+      player2: 'Player 2',
+      nextMove: 'Player 2',
+      winner: '',
+      winningLine: 0,
+      currentBoard: {
+        boardId: 1,
+        p1Symbol: 'O',
+        p2Symbol: 'X',
+        pos0: 'X',
+        pos1: '',
+        pos2: '',
+        pos3: '',
+        pos4: 'O',
+        pos5: '',
+        pos6: '',
+        pos7: '',
+        pos8: '',
+      },
+    };
+
+    component.game = sampleGame;
+    component.username = 'Player 2';
+    const spyService = spyOn(service2, 'add');
+
+    component.humanButtonClicked();
+
+    const out = expect(spyService).toHaveBeenCalledWith(
+      `Your move, ${component.username} (${sampleGame.currentBoard.p2Symbol})`
+    );
+  });
+
+  it('checkWinOrDraw should give correct message service when it is a human opponent', () => {
+    const board: ICurrentBoard = {
+      boardId: 1,
+      p1Symbol: 'O',
+      p2Symbol: 'X',
+      pos0: '',
+      pos1: '',
+      pos2: '',
+      pos3: '',
+      pos4: 'O',
+      pos5: '',
+      pos6: '',
+      pos7: '',
+      pos8: '',
+    };
+
+    const spyService = spyOn(service2, 'add');
+
+    component.humanOpponent = true;
+    component.checkWinOrDraw(board);
+
+    const out = expect(spyService).toHaveBeenCalledWith(
+      'Waiting for opponent to join or move...'
+    );
+  });
+
+  it('checkWinOrDraw should give correct message service when playing against computer', () => {
+    const board: ICurrentBoard = {
+      boardId: 1,
+      p1Symbol: 'O',
+      p2Symbol: 'X',
+      pos0: '',
+      pos1: '',
+      pos2: '',
+      pos3: '',
+      pos4: 'O',
+      pos5: '',
+      pos6: '',
+      pos7: '',
+      pos8: '',
+    };
+
+    const spyService = spyOn(service2, 'add');
+
+    component.humanOpponent = false;
+    component.checkWinOrDraw(board);
+
+    const out = expect(spyService).not.toHaveBeenCalledWith(
+      'Waiting for opponent to join or move...'
+    );
   });
 });
