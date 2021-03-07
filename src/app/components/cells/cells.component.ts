@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { ICurrentBoard, IGame } from 'src/app/models/game';
 import { MoveModel } from 'src/app/models/moveModel';
 import { NewGameModel } from 'src/app/models/newGameModel';
@@ -150,7 +151,6 @@ export class CellsComponent implements OnInit {
             this.copyBoard(game.currentBoard),
             this.checkWinOrDraw(game.currentBoard),
             this.toggleBoardLock(game),
-            // this.messagesService.add(''),
             this.messagesService.add(
               this.humanOpponent && !this.gameOver
                 ? `Your move, ${this.username} (${

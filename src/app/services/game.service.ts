@@ -33,7 +33,6 @@ export class GameService {
   }
 
   sendMove(moveParams: MoveModel): Observable<IGame> {
-    // this.messagesService.add('Sending your move to the game server...');
     return this.http
       .post<IGame>(
         `${environment.game.baseurl}${environment.game.endpoint}${environment.game.move}`,
@@ -42,6 +41,17 @@ export class GameService {
           gameId: moveParams.gameId,
           position: moveParams.position,
         }
+      )
+      .pipe(
+        tap((data) => console.log('Response: ' + JSON.stringify(data)))
+        // catchError(this.handleError)
+      );
+  }
+
+  unblock(unblockParams: MoveModel): Observable<any> {
+    return this.http
+      .get<any>(
+        `${environment.game.baseurl}${environment.game.endpoint}${environment.game.unblock}?gameId=${unblockParams.gameId}&id=${unblockParams.position}`
       )
       .pipe(
         tap((data) => console.log('Response: ' + JSON.stringify(data)))

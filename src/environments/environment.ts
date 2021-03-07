@@ -7,8 +7,9 @@ export const environment = {
   game: {
     baseurl: 'http://localhost:5000/',
     endpoint: 'game/',
-    move: 'move/',
+    move: 'move',
     new: 'new',
+    unblock: 'unblock',
   },
 };
 
