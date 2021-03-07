@@ -160,6 +160,7 @@ describe('CellsComponent', () => {
     component.winningLine = 1;
     component.username = 'Player 1';
     component.winner = 'Player 1';
+
     const spyService1 = spyOn(service2, 'add');
     const board: ICurrentBoard = {
       boardId: 1,
@@ -178,8 +179,9 @@ describe('CellsComponent', () => {
 
     component.checkWinOrDraw(board);
 
-    const out = expect(component.checkWinOrDraw(board)).toHaveBeenCalled;
-    expect(spyService1).toHaveBeenCalled();
+    const out1 = expect(component.checkWinOrDraw(board)).toHaveBeenCalled;
+    const out2 = expect(spyService1).toHaveBeenCalled();
+    const out3 = expect(component.gameOver).toBe(true);
   });
 
   // checkWinOrDraw with Computer as winner
@@ -204,8 +206,9 @@ describe('CellsComponent', () => {
     };
     component.checkWinOrDraw(board);
 
-    const out = expect(component.checkWinOrDraw(board)).toHaveBeenCalled;
-    expect(spyService1).toHaveBeenCalled();
+    const out1 = expect(component.checkWinOrDraw(board)).toHaveBeenCalled;
+    const out2 = expect(spyService1).toHaveBeenCalled();
+    const out3 = expect(component.gameOver).toBe(true);
   });
 
   // checkWinOrDraw with one position left
@@ -234,6 +237,7 @@ describe('CellsComponent', () => {
 
     const out1 = expect(component.checkWinOrDraw(board)).toHaveBeenCalled;
     const out2 = expect(spyService1).toHaveBeenCalled;
+    const out3 = expect(component.gameOver).toBe(true);
   });
 
   it('positionButtonClicked should not update cell clicked when game is undefined', () => {
@@ -308,49 +312,16 @@ describe('CellsComponent', () => {
   it('humanButtonClicked should give correct message service when game is undefined', () => {
     const spyService = spyOn(service2, 'add');
 
-    component.game = undefined;
-
-    component.humanButtonClicked();
-
-    const out = expect(spyService).toHaveBeenCalledTimes(1);
-  });
-
-  it('humanButtonClicked should give correct message service when it is player 1"s turn', () => {
-    const sampleGame: IGame = {
-      gameId: 1,
-      player1: 'Player 1',
-      player2: '',
-      nextMove: 'Player 1',
-      winner: '',
-      winningLine: 0,
-      currentBoard: {
-        boardId: 1,
-        p1Symbol: 'O',
-        p2Symbol: 'X',
-        pos0: 'X',
-        pos1: '',
-        pos2: '',
-        pos3: '',
-        pos4: 'O',
-        pos5: '',
-        pos6: '',
-        pos7: '',
-        pos8: '',
-      },
-    };
-
-    component.game = sampleGame;
-    component.username = 'Player 1';
-    const spyService = spyOn(service2, 'add');
+    component.username = 'Test Player';
 
     component.humanButtonClicked();
 
     const out = expect(spyService).toHaveBeenCalledWith(
-      `Your move, ${component.username} (${sampleGame.currentBoard.p1Symbol})`
+      'Your move, Test Player'
     );
   });
 
-  it('humanButtonClicked should give correct message service when it is player 2"s turn', () => {
+  it('toggleBoardLock should lock if it is not player"s move', () => {
     const sampleGame: IGame = {
       gameId: 1,
       player1: 'Player 1',
@@ -375,65 +346,80 @@ describe('CellsComponent', () => {
     };
 
     component.game = sampleGame;
-    component.username = 'Player 2';
-    const spyService = spyOn(service2, 'add');
-
-    component.humanButtonClicked();
-
-    const out = expect(spyService).toHaveBeenCalledWith(
-      `Your move, ${component.username} (${sampleGame.currentBoard.p2Symbol})`
-    );
-  });
-
-  it('checkWinOrDraw should give correct message service when it is a human opponent', () => {
-    const board: ICurrentBoard = {
-      boardId: 1,
-      p1Symbol: 'O',
-      p2Symbol: 'X',
-      pos0: '',
-      pos1: '',
-      pos2: '',
-      pos3: '',
-      pos4: 'O',
-      pos5: '',
-      pos6: '',
-      pos7: '',
-      pos8: '',
-    };
-
-    const spyService = spyOn(service2, 'add');
-
     component.humanOpponent = true;
-    component.checkWinOrDraw(board);
+    component.username = 'Player 1';
+    component.boardLocked = false;
 
-    const out = expect(spyService).toHaveBeenCalledWith(
-      'Waiting for opponent to join or move...'
-    );
+    component.toggleBoardLock(sampleGame);
+
+    const out = expect(component.boardLocked).toBe(true);
   });
 
-  it('checkWinOrDraw should give correct message service when playing against computer', () => {
-    const board: ICurrentBoard = {
-      boardId: 1,
-      p1Symbol: 'O',
-      p2Symbol: 'X',
-      pos0: '',
-      pos1: '',
-      pos2: '',
-      pos3: '',
-      pos4: 'O',
-      pos5: '',
-      pos6: '',
-      pos7: '',
-      pos8: '',
+  it('toggleBoardLock should not lock if it is player"s move', () => {
+    const sampleGame: IGame = {
+      gameId: 1,
+      player1: 'Player 1',
+      player2: 'Player 2',
+      nextMove: 'Player 2',
+      winner: '',
+      winningLine: 0,
+      currentBoard: {
+        boardId: 1,
+        p1Symbol: 'O',
+        p2Symbol: 'X',
+        pos0: 'X',
+        pos1: '',
+        pos2: '',
+        pos3: '',
+        pos4: 'O',
+        pos5: '',
+        pos6: '',
+        pos7: '',
+        pos8: '',
+      },
     };
 
-    const spyService = spyOn(service2, 'add');
+    component.game = sampleGame;
+    component.humanOpponent = true;
+    component.username = 'Player 2';
+    component.boardLocked = true;
 
+    component.toggleBoardLock(sampleGame);
+
+    const out = expect(component.boardLocked).toBe(false);
+  });
+
+  it('toggleBoardLock should lock if playing against computer', () => {
+    const sampleGame: IGame = {
+      gameId: 1,
+      player1: 'Player 1',
+      player2: 'Computer',
+      nextMove: 'Player 1',
+      winner: '',
+      winningLine: 0,
+      currentBoard: {
+        boardId: 1,
+        p1Symbol: 'O',
+        p2Symbol: 'X',
+        pos0: 'X',
+        pos1: '',
+        pos2: '',
+        pos3: '',
+        pos4: 'O',
+        pos5: '',
+        pos6: '',
+        pos7: '',
+        pos8: '',
+      },
+    };
+
+    component.game = sampleGame;
     component.humanOpponent = false;
-    component.checkWinOrDraw(board);
+    component.username = 'Player 1';
+    component.boardLocked = true;
 
-    const out = expect(spyService).not.toHaveBeenCalledWith(
-      'Waiting for opponent to join or move...'
-    );
+    component.toggleBoardLock(sampleGame);
+
+    const out = expect(component.boardLocked).toBe(false);
   });
 });

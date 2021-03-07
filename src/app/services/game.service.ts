@@ -18,9 +18,6 @@ export class GameService {
   ) {}
 
   newGame(newGameParams: NewGameModel): Observable<IGame> {
-    if (newGameParams.opponent !== '') {
-      this.messagesService.add('Initializing game with game server...');
-    }
     return this.http
       .post<IGame>(
         `${environment.game.baseurl}${environment.game.endpoint}${environment.game.new}`,
@@ -36,7 +33,7 @@ export class GameService {
   }
 
   sendMove(moveParams: MoveModel): Observable<IGame> {
-    this.messagesService.add('Sending your move to the game server...');
+    // this.messagesService.add('Sending your move to the game server...');
     return this.http
       .post<IGame>(
         `${environment.game.baseurl}${environment.game.endpoint}${environment.game.move}`,

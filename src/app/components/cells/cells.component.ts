@@ -27,16 +27,14 @@ export class CellsComponent implements OnInit {
   humanOpponent = false;
   board = new SymbolsModel();
   boardLocked = false;
+  gameOver = false;
 
   constructor(
     private gameService: GameService,
     public messagesService: MessagesService
   ) {}
 
-  ngOnInit(): void {
-    // this.board = new SymbolsModel();
-    // console.log('Board: ' + JSON.stringify(this.board));
-  }
+  ngOnInit(): void {}
 
   humanButtonClicked(): void {
     this.opponent = '';
@@ -47,22 +45,7 @@ export class CellsComponent implements OnInit {
       opponent: this.opponent,
     };
 
-    // send the appropriate prompt message
-    if (this.game !== undefined) {
-      // is it my turn to move?
-      if (this.game.nextMove === this.username) {
-        // pick up my symbol
-        let symbol;
-        if (this.username === this.game.player1) {
-          symbol = this.game.currentBoard.p1Symbol;
-        } else {
-          symbol = this.game.currentBoard.p2Symbol;
-        }
-        this.messagesService.add(
-          `Your move, ${this.game.nextMove} (${symbol})`
-        );
-      }
-    }
+    this.messagesService.add(`Your move, ${this.username}`);
 
     this.boardLocked = true;
     this.gameService.newGame(newGameParams).subscribe({
@@ -71,14 +54,7 @@ export class CellsComponent implements OnInit {
           (this.gameId = game.gameId),
           (this.opponent = game.player2),
           this.copyBoard(game.currentBoard),
-          this.toggleBoardLock(game),
-          this.messagesService.add(
-            `Make your first move, ${this.username} (${
-              this.username === this.game.player1
-                ? this.game.currentBoard.p1Symbol
-                : this.game.currentBoard.p2Symbol
-            })`
-          );
+          this.toggleBoardLock(game);
       },
       // error: (err) => (this.errorMessage = err),
     });
@@ -115,6 +91,8 @@ export class CellsComponent implements OnInit {
     this.messagesService.clear();
     this.humanOpponent = false;
     this.boardLocked = false;
+    this.game = undefined;
+    this.gameOver = false;
   }
 
   positionButtonClicked(position: number): void {
@@ -127,6 +105,31 @@ export class CellsComponent implements OnInit {
     } else {
       // current player is initiating the game
       this.board.symbol[position] = 'O';
+    }
+
+    // send the appropriate prompt message
+
+    this.messagesService.add('Sending your move to the game server...');
+    if (this.humanOpponent) {
+      this.messagesService.add('Waiting for opponent to join or move...');
+    }
+
+    if (this.game !== undefined) {
+      // is it my turn to move?
+      if (this.game.nextMove === this.username) {
+        // pick up my symbol
+        let symbol;
+        if (this.username === this.game.player1) {
+          symbol = this.game.currentBoard.p1Symbol;
+        } else {
+          symbol = this.game.currentBoard.p2Symbol;
+        }
+        if (!this.humanOpponent && !this.gameOver) {
+          this.messagesService.add(
+            `Your move, ${this.game.nextMove} (${symbol})`
+          );
+        }
+      }
     }
 
     if (this.gameId > 0) {
@@ -146,7 +149,17 @@ export class CellsComponent implements OnInit {
             (this.winner = game.winner),
             this.copyBoard(game.currentBoard),
             this.checkWinOrDraw(game.currentBoard),
-            this.toggleBoardLock(game);
+            this.toggleBoardLock(game),
+            // this.messagesService.add(''),
+            this.messagesService.add(
+              this.humanOpponent && !this.gameOver
+                ? `Your move, ${this.username} (${
+                    this.username === this.game.player1
+                      ? this.game.currentBoard.p1Symbol
+                      : this.game.currentBoard.p2Symbol
+                  })`
+                : ''
+            );
         },
         // error: (err) => (this.errorMessage = err),
       });
@@ -166,6 +179,7 @@ export class CellsComponent implements OnInit {
         }
       }
       this.messagesService.add(`${winningPlayer} won the game!`);
+      this.gameOver = true;
     } else {
       // There is no winner yet. If one position is left, then game is drawn.
       let filledPositions = 0;
@@ -199,14 +213,7 @@ export class CellsComponent implements OnInit {
       this.filledPositions = filledPositions;
       if (filledPositions === 8) {
         this.messagesService.add(`This game is a draw`);
-      } else {
-        if (!this.humanOpponent) {
-          this.messagesService.add(
-            `Your move, ${this.game?.nextMove} (${this.game?.currentBoard.p1Symbol})`
-          );
-        } else {
-          this.messagesService.add('Waiting for opponent to join or move...');
-        }
+        this.gameOver = true;
       }
     }
   }
