@@ -5,6 +5,8 @@ import { Observable, of } from 'rxjs';
 import { ICurrentBoard, IGame } from 'src/app/models/game';
 import { MoveModel } from 'src/app/models/move-model';
 import { NewGameModel } from 'src/app/models/newgame-model';
+import { UnblockModel } from 'src/app/models/unblock-model';
+import { UnblockResponseModel } from 'src/app/models/unblock-response-model';
 import { GameService } from 'src/app/services/game.service';
 import { MessagesService } from 'src/app/services/messages.service';
 import { MessagesComponent } from '../messages/messages.component';
@@ -64,6 +66,16 @@ class MockService {
     };
 
     return of(returnedGame);
+  }
+
+  unblock(unblockParams: UnblockModel): Observable<any> {
+    const unblockResponse: UnblockResponseModel = {
+      gameId: 1,
+      issuer: 'Player 2',
+      qIndex: 1,
+    };
+
+    return of(unblockResponse);
   }
 }
 
@@ -421,5 +433,331 @@ describe('CellsComponent', () => {
     component.toggleBoardLock(sampleGame);
 
     const out = expect(component.boardLocked).toBe(false);
+  });
+
+  it('unblockOpponent should not call unblock service if it is not player against human or not game over', () => {
+    const sampleGame: IGame = {
+      gameId: 1,
+      player1: 'Player 1',
+      player2: 'Computer',
+      nextMove: 'Player 1',
+      winner: 'Player 1',
+      winningLine: 1,
+      currentBoard: {
+        boardId: 1,
+        p1Symbol: 'O',
+        p2Symbol: 'X',
+        pos0: 'O',
+        pos1: 'O',
+        pos2: 'O',
+        pos3: '',
+        pos4: 'X',
+        pos5: '',
+        pos6: 'X',
+        pos7: '',
+        pos8: 'X',
+      },
+    };
+
+    component.game = sampleGame;
+    component.humanOpponent = false;
+    component.username = 'Player 1';
+    component.gameOver = false;
+    const spyService = spyOn(service1, 'unblock');
+
+    component.unblockOpponent(sampleGame);
+
+    const out = expect(spyService).not.toHaveBeenCalled();
+  });
+
+  it('unblockOpponent should not call unblock service if winner is not current player', () => {
+    const sampleGame: IGame = {
+      gameId: 1,
+      player1: 'Player 2',
+      player2: 'Player 1',
+      nextMove: 'Player 2',
+      winner: 'Player 1',
+      winningLine: 1,
+      currentBoard: {
+        boardId: 1,
+        p1Symbol: 'O',
+        p2Symbol: 'X',
+        pos0: 'O',
+        pos1: 'O',
+        pos2: 'O',
+        pos3: '',
+        pos4: 'X',
+        pos5: '',
+        pos6: 'X',
+        pos7: '',
+        pos8: 'X',
+      },
+    };
+
+    component.game = sampleGame;
+    component.humanOpponent = true;
+    component.gameOver = true;
+    component.username = 'Player 2';
+
+    const spyService = spyOn(service1, 'unblock');
+
+    component.unblockOpponent(sampleGame);
+
+    const out = expect(spyService).not.toHaveBeenCalled();
+  });
+
+  it('unblockOpponent should call unblock with qIndex 1 if winner is Player1', () => {
+    const sampleGame: IGame = {
+      gameId: 1,
+      player1: 'Player 1',
+      player2: 'Player 2',
+      nextMove: 'Player 2',
+      winner: 'Player 1',
+      winningLine: 1,
+      currentBoard: {
+        boardId: 1,
+        p1Symbol: 'O',
+        p2Symbol: 'X',
+        pos0: 'O',
+        pos1: 'O',
+        pos2: 'O',
+        pos3: '',
+        pos4: 'X',
+        pos5: '',
+        pos6: 'X',
+        pos7: '',
+        pos8: 'X',
+      },
+    };
+
+    component.game = sampleGame;
+    component.humanOpponent = true;
+    component.gameOver = true;
+    component.gameId = 1;
+    component.username = 'Player 1';
+    component.unblockResponse.gameId = 0;
+    const unblockParams: UnblockModel = {
+      issuer: 'Player 1',
+      gameId: 1,
+      qIndex: 1,
+    };
+
+    const spyService = spyOn(service1, 'unblock').and.returnValue(of());
+
+    component.unblockOpponent(sampleGame);
+
+    const out1 = expect(spyService).toHaveBeenCalledWith(unblockParams);
+    const out2 = expect(spyService).toHaveBeenCalledTimes(1);
+  });
+
+  it('unblockOpponent should call unblock with qIndex 2 if winner is Player2', () => {
+    const sampleGame: IGame = {
+      gameId: 1,
+      player1: 'Player 1',
+      player2: 'Player 2',
+      nextMove: 'Player 1',
+      winner: 'Player 2',
+      winningLine: 1,
+      currentBoard: {
+        boardId: 1,
+        p1Symbol: 'O',
+        p2Symbol: 'X',
+        pos0: 'O',
+        pos1: 'O',
+        pos2: 'O',
+        pos3: '',
+        pos4: 'X',
+        pos5: '',
+        pos6: 'X',
+        pos7: '',
+        pos8: 'X',
+      },
+    };
+
+    component.game = sampleGame;
+    component.humanOpponent = true;
+    component.gameOver = true;
+    component.gameId = 1;
+    component.username = 'Player 2';
+    component.unblockResponse.gameId = 0;
+    const unblockParams: UnblockModel = {
+      issuer: 'Player 2',
+      gameId: 1,
+      qIndex: 2,
+    };
+
+    const spyService = spyOn(service1, 'unblock').and.returnValue(of());
+
+    component.unblockOpponent(sampleGame);
+
+    const out1 = expect(spyService).toHaveBeenCalledWith(unblockParams);
+    const out2 = expect(spyService).toHaveBeenCalledTimes(1);
+  });
+
+  it('unblockOpponent should not call unblock if winner exists and current player was previously unblocked', () => {
+    const sampleGame: IGame = {
+      gameId: 1,
+      player1: 'Player 1',
+      player2: 'Player 2',
+      nextMove: 'Player 1',
+      winner: 'Player 2',
+      winningLine: 1,
+      currentBoard: {
+        boardId: 1,
+        p1Symbol: 'O',
+        p2Symbol: 'X',
+        pos0: 'O',
+        pos1: 'O',
+        pos2: 'O',
+        pos3: '',
+        pos4: 'X',
+        pos5: '',
+        pos6: 'X',
+        pos7: '',
+        pos8: 'X',
+      },
+    };
+
+    component.game = sampleGame;
+    component.humanOpponent = true;
+    component.gameOver = true;
+    component.gameId = 1;
+    component.username = 'Player 2';
+    component.unblockResponse.gameId = 1;
+    const unblockParams: UnblockModel = {
+      issuer: 'Player 2',
+      gameId: 1,
+      qIndex: 2,
+    };
+
+    const spyService = spyOn(service1, 'unblock').and.returnValue(of());
+
+    component.unblockOpponent(sampleGame);
+
+    const out1 = expect(spyService).not.toHaveBeenCalled();
+  });
+
+  it('unblockOpponent should not call unblock service if it is a draw and not not current player"s move', () => {
+    const sampleGame: IGame = {
+      gameId: 1,
+      player1: 'Player 2',
+      player2: 'Player 1',
+      nextMove: 'Player 2',
+      winner: 'Player 1',
+      winningLine: 0,
+      currentBoard: {
+        boardId: 1,
+        p1Symbol: 'O',
+        p2Symbol: 'X',
+        pos0: 'O',
+        pos1: 'X',
+        pos2: 'O',
+        pos3: 'X',
+        pos4: 'X',
+        pos5: 'O',
+        pos6: 'X',
+        pos7: '',
+        pos8: 'X',
+      },
+    };
+
+    component.game = sampleGame;
+    component.humanOpponent = true;
+    component.gameOver = true;
+    component.username = 'Player 1';
+
+    const spyService = spyOn(service1, 'unblock');
+
+    component.unblockOpponent(sampleGame);
+
+    const out = expect(spyService).not.toHaveBeenCalled();
+  });
+
+  it('unblockOpponent should call unblock with qIndex 1 if it is a draw and is Player1"s move', () => {
+    const sampleGame: IGame = {
+      gameId: 1,
+      player1: 'Player 1',
+      player2: 'Player 2',
+      nextMove: 'Player 1',
+      winner: 'Player 1',
+      winningLine: 1,
+      currentBoard: {
+        boardId: 1,
+        p1Symbol: 'O',
+        p2Symbol: 'X',
+        pos0: 'O',
+        pos1: 'O',
+        pos2: 'O',
+        pos3: '',
+        pos4: 'X',
+        pos5: '',
+        pos6: 'X',
+        pos7: '',
+        pos8: 'X',
+      },
+    };
+
+    component.game = sampleGame;
+    component.humanOpponent = true;
+    component.gameOver = true;
+    component.gameId = 1;
+    component.username = 'Player 1';
+    component.unblockResponse.gameId = 0;
+    const unblockParams: UnblockModel = {
+      issuer: 'Player 1',
+      gameId: 1,
+      qIndex: 1,
+    };
+
+    const spyService = spyOn(service1, 'unblock').and.returnValue(of());
+
+    component.unblockOpponent(sampleGame);
+
+    const out1 = expect(spyService).toHaveBeenCalledWith(unblockParams);
+    const out2 = expect(spyService).toHaveBeenCalledTimes(1);
+  });
+
+  it('unblockOpponent should call unblock with qIndex 2 if it is a draw and is Player2"s move', () => {
+    const sampleGame: IGame = {
+      gameId: 1,
+      player1: 'Player 1',
+      player2: 'Player 2',
+      nextMove: 'Player 2',
+      winner: 'Player 2',
+      winningLine: 1,
+      currentBoard: {
+        boardId: 1,
+        p1Symbol: 'O',
+        p2Symbol: 'X',
+        pos0: 'O',
+        pos1: 'O',
+        pos2: 'O',
+        pos3: '',
+        pos4: 'X',
+        pos5: '',
+        pos6: 'X',
+        pos7: '',
+        pos8: 'X',
+      },
+    };
+
+    component.game = sampleGame;
+    component.humanOpponent = true;
+    component.gameOver = true;
+    component.gameId = 1;
+    component.username = 'Player 2';
+    component.unblockResponse.gameId = 0;
+    const unblockParams: UnblockModel = {
+      issuer: 'Player 2',
+      gameId: 1,
+      qIndex: 2,
+    };
+
+    const spyService = spyOn(service1, 'unblock').and.returnValue(of());
+
+    component.unblockOpponent(sampleGame);
+
+    const out1 = expect(spyService).toHaveBeenCalledWith(unblockParams);
+    const out2 = expect(spyService).toHaveBeenCalledTimes(1);
   });
 });

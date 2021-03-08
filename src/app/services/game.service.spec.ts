@@ -10,11 +10,11 @@ import { GameService } from './game.service';
 import { environment } from 'src/environments/environment';
 import { MoveModel } from '../models/move-model';
 import { UnblockModel } from '../models/unblock-model';
+import { CellsComponent } from '../components/cells/cells.component';
 
 describe('GameService', () => {
   let service: GameService;
   let httpMock: HttpTestingController;
-  // let injector: TestBed;
 
   const game: IGame = {
     gameId: 1,
@@ -42,8 +42,6 @@ describe('GameService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({ imports: [HttpClientTestingModule] });
     service = TestBed.inject(GameService);
-    // injector = getTestBed();
-    // httpMock = injector.get(HttpTestingController);
     httpMock = TestBed.inject(HttpTestingController);
   });
 
@@ -132,7 +130,7 @@ describe('GameService', () => {
   });
 
   describe('#unblock', () => {
-    it('it should Move params and receive the published message', () => {
+    it('it should use unbolck params and receive the published message', () => {
       const unblockParams = new UnblockModel('Player 1', 1, 1);
       const unblockResponse = {
         gameId: 1,
