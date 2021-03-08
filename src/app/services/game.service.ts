@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IGame } from '../models/game';
 import { NewGameModel } from '../models/newgame-model';
@@ -28,8 +28,8 @@ export class GameService {
         }
       )
       .pipe(
-        tap((data) => console.log('Response: ' + JSON.stringify(data)))
-        // catchError(this.handleError)
+        tap((data) => console.log('Response: ' + JSON.stringify(data))),
+        catchError(this.handleError<IGame>('newGame'))
       );
   }
 
@@ -44,8 +44,8 @@ export class GameService {
         }
       )
       .pipe(
-        tap((data) => console.log('Response: ' + JSON.stringify(data)))
-        // catchError(this.handleError)
+        tap((data) => console.log('Response: ' + JSON.stringify(data))),
+        catchError(this.handleError<IGame>('sendMove'))
       );
   }
 
@@ -55,26 +55,30 @@ export class GameService {
         `${environment.game.baseurl}${environment.game.endpoint}${environment.game.unblock}?gameId=${unblockParams.gameId}&id=${unblockParams.qIndex}`
       )
       .pipe(
-        tap((data) =>
-          console.log('Unblock Message from: ' + JSON.stringify(data))
+        tap(
+          (data) =>
+            console.log('Unblock Message from: ' + JSON.stringify(data)),
+          catchError(this.handleError<any>('unblock'))
         )
-        // catchError(this.handleError)
       );
   }
 
-  // private handleError(err: HttpErrorResponse): Observable<never> {
-  //   // in a real world app, we may send the server to some remote logging infrastructure
-  //   // instead of just logging it to the console
-  //   let errorMessage = '';
-  //   if (err.error instanceof ErrorEvent) {
-  //     // A client-side or network error occurred. Handle it accordingly.
-  //     errorMessage = `An error occurred: ${err.error.message}`;
-  //   } else {
-  //     // The backend returned an unsuccessful response code.
-  //     // The response body may contain clues as to what went wrong,
-  //     errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`;
-  //   }
-  //   console.error(errorMessage);
-  //   return throwError(errorMessage);
-  // }
+  /**
+   * Handle Http operation that failed.
+   * Let the app continue.
+   * @param operation - name of the operation that failed
+   * @param result - optional value to return as the observable result
+   */
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      // TODO: send the error to remote logging infrastructure
+      console.error(error); // log to console instead
+
+      // TODO: better job of transforming error for user consumption
+      // this.log(`${operation} failed: ${error.message}`);
+
+      // Let the app keep running by returning an empty result.
+      return of(result as T);
+    };
+  }
 }
