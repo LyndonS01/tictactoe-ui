@@ -31,7 +31,7 @@ describe('MessagesService', () => {
   it('should remove all messages when clear is called', () => {
     service = new MessagesService();
 
-    service.add('You lost the game!');
+    service.add('You lost the game');
 
     service.clear();
 

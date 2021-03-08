@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IGame } from '../models/game';
-import { NewGameModel } from '../models/newGameModel';
+import { NewGameModel } from '../models/newgame-model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, tap, map } from 'rxjs/operators';
-import { MoveModel } from '../models/moveModel';
+import { MoveModel } from '../models/move-model';
 import { MessagesService } from './messages.service';
+import { UnblockModel } from '../models/unblock-model';
 
 @Injectable({
   providedIn: 'root',
@@ -48,13 +49,15 @@ export class GameService {
       );
   }
 
-  unblock(unblockParams: MoveModel): Observable<any> {
+  unblock(unblockParams: UnblockModel): Observable<any> {
     return this.http
       .get<any>(
-        `${environment.game.baseurl}${environment.game.endpoint}${environment.game.unblock}?gameId=${unblockParams.gameId}&id=${unblockParams.position}`
+        `${environment.game.baseurl}${environment.game.endpoint}${environment.game.unblock}?gameId=${unblockParams.gameId}&id=${unblockParams.qIndex}`
       )
       .pipe(
-        tap((data) => console.log('Response: ' + JSON.stringify(data)))
+        tap((data) =>
+          console.log('Unblock Message from: ' + JSON.stringify(data))
+        )
         // catchError(this.handleError)
       );
   }
