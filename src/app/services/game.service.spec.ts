@@ -129,4 +129,25 @@ describe('GameService', () => {
       req.flush(testResponse);
     });
   });
+
+  describe('#unblock', () => {
+    it('it should Move params and receive the published message', () => {
+      const unblockParams = new MoveModel('Player 1', 1, 1);
+      const unblockResponse = {
+        gameId: 1,
+        player: 'Player 1', // irrelevant
+        position: 1, // index to route key or queue
+      };
+
+      service.unblock(unblockParams).subscribe((result) => {
+        expect(result).toEqual(unblockResponse);
+      });
+
+      const req = httpMock.expectOne(
+        `${environment.game.baseurl}${environment.game.endpoint}${environment.game.unblock}?gameId=${unblockParams.gameId}&id=${unblockParams.position}`
+      );
+      expect(req.request.method).toBe('GET');
+      req.flush(unblockResponse);
+    });
+  });
 });
