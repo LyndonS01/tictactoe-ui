@@ -5,6 +5,7 @@ import { ICurrentBoard, IGame } from 'src/app/models/game';
 import { MoveModel } from 'src/app/models/moveModel';
 import { NewGameModel } from 'src/app/models/newGameModel';
 import { SymbolsModel } from 'src/app/models/symbolsModel';
+import { UnblockResponseModel } from 'src/app/models/unblockResponseModel';
 import { GameService } from 'src/app/services/game.service';
 import { MessagesService } from 'src/app/services/messages.service';
 
@@ -29,6 +30,7 @@ export class CellsComponent implements OnInit {
   board = new SymbolsModel();
   boardLocked = false;
   gameOver = false;
+  unblockResponse = new UnblockResponseModel();
 
   constructor(
     private gameService: GameService,
@@ -94,6 +96,7 @@ export class CellsComponent implements OnInit {
     this.boardLocked = false;
     this.game = undefined;
     this.gameOver = false;
+    this.unblockResponse.gameId = 0;
   }
 
   positionButtonClicked(position: number): void {
@@ -150,6 +153,7 @@ export class CellsComponent implements OnInit {
             (this.winner = game.winner),
             this.copyBoard(game.currentBoard),
             this.checkWinOrDraw(game.currentBoard),
+            this.unblockOpponent(game),
             this.toggleBoardLock(game),
             this.messagesService.add(
               this.humanOpponent && !this.gameOver
@@ -239,6 +243,57 @@ export class CellsComponent implements OnInit {
       }
     } else {
       this.boardLocked = false;
+    }
+  }
+
+  unblockOpponent(game: IGame): void {
+    const unblockParams: MoveModel = {
+      username: this.username,
+      gameId: this.gameId,
+      position: 0,
+    };
+
+    if (this.humanOpponent && this.gameOver) {
+      if (game.winningLine > 0) {
+        // it's a win
+        if (game.winner === this.username) {
+          if (game.winner === game.player1) {
+            unblockParams.position = 1;
+          } else {
+            unblockParams.position = 2;
+          }
+
+          if (this.unblockResponse.gameId < 1) {
+            // no unblock received earlier, you weren't the one unblocked
+            this.gameService.unblock(unblockParams).subscribe({
+              next: (u) => {
+                (this.unblockResponse.gameId = u.gameId),
+                  (this.unblockResponse.player = u.player),
+                  (this.unblockResponse.position = u.position);
+              },
+              // error: (err) => (this.errorMessage = err),
+            });
+          }
+        }
+      } else {
+        // it's a draw
+        if (game.nextMove === this.username) {
+          if (game.nextMove === game.player1) {
+            unblockParams.position = 1;
+          } else {
+            unblockParams.position = 2;
+          }
+
+          this.gameService.unblock(unblockParams).subscribe({
+            next: (u) => {
+              (this.unblockResponse.gameId = u.gameId),
+                (this.unblockResponse.player = u.player),
+                (this.unblockResponse.position = u.position);
+            },
+            // error: (err) => (this.errorMessage = err),
+          });
+        }
+      }
     }
   }
 }
