@@ -16,7 +16,7 @@ import { MessagesService } from 'src/app/services/messages.service';
   styleUrls: ['./cells.component.css'],
 })
 export class CellsComponent implements OnInit {
-  username = 'Lefty';
+  username = 'Left';
   opponent = '';
   gameId = 0;
   position = 0;
