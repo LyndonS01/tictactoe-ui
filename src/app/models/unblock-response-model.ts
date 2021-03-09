@@ -1,5 +1,5 @@
 export class UnblockResponseModel {
   gameId = 0;
-  player = '';
-  position = 0;
+  issuer = '';
+  qIndex = 0;
 }

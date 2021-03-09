@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { ICurrentBoard, IGame } from 'src/app/models/game';
-import { MoveModel } from 'src/app/models/moveModel';
-import { NewGameModel } from 'src/app/models/newGameModel';
-import { SymbolsModel } from 'src/app/models/symbolsModel';
-import { UnblockResponseModel } from 'src/app/models/unblockResponseModel';
+import { MoveModel } from 'src/app/models/move-model';
+import { NewGameModel } from 'src/app/models/newgame-model';
+import { SymbolsModel } from 'src/app/models/symbols-model';
+import { UnblockModel } from 'src/app/models/unblock-model';
+import { UnblockResponseModel } from 'src/app/models/unblock-response-model';
 import { GameService } from 'src/app/services/game.service';
 import { MessagesService } from 'src/app/services/messages.service';
 
@@ -15,7 +16,7 @@ import { MessagesService } from 'src/app/services/messages.service';
   styleUrls: ['./cells.component.css'],
 })
 export class CellsComponent implements OnInit {
-  username = 'Player 1';
+  username = 'Left';
   opponent = '';
   gameId = 0;
   position = 0;
@@ -174,13 +175,9 @@ export class CellsComponent implements OnInit {
   checkWinOrDraw(currentBoard: ICurrentBoard): void {
     // check for win conditions
     if (this.winningLine > 0) {
-      let winningPlayer = 'You';
-      if (this.winner !== this.game?.player1) {
-        if (this.winner !== 'Computer') {
-          winningPlayer = this.winner;
-        } else {
-          winningPlayer = 'The computer';
-        }
+      let winningPlayer = this.winner;
+      if (this.winner === 'Computer') {
+        winningPlayer = 'The computer';
       }
       this.messagesService.add(`${winningPlayer} won the game!`);
       this.gameOver = true;
@@ -247,10 +244,10 @@ export class CellsComponent implements OnInit {
   }
 
   unblockOpponent(game: IGame): void {
-    const unblockParams: MoveModel = {
-      username: this.username,
+    const unblockParams: UnblockModel = {
+      issuer: this.username,
       gameId: this.gameId,
-      position: 0,
+      qIndex: 0,
     };
 
     if (this.humanOpponent && this.gameOver) {
@@ -258,9 +255,9 @@ export class CellsComponent implements OnInit {
         // it's a win
         if (game.winner === this.username) {
           if (game.winner === game.player1) {
-            unblockParams.position = 1;
+            unblockParams.qIndex = 1;
           } else {
-            unblockParams.position = 2;
+            unblockParams.qIndex = 2;
           }
 
           if (this.unblockResponse.gameId < 1) {
@@ -268,8 +265,8 @@ export class CellsComponent implements OnInit {
             this.gameService.unblock(unblockParams).subscribe({
               next: (u) => {
                 (this.unblockResponse.gameId = u.gameId),
-                  (this.unblockResponse.player = u.player),
-                  (this.unblockResponse.position = u.position);
+                  (this.unblockResponse.issuer = u.issuer),
+                  (this.unblockResponse.qIndex = u.qIndex);
               },
               // error: (err) => (this.errorMessage = err),
             });
@@ -279,16 +276,16 @@ export class CellsComponent implements OnInit {
         // it's a draw
         if (game.nextMove === this.username) {
           if (game.nextMove === game.player1) {
-            unblockParams.position = 1;
+            unblockParams.qIndex = 1;
           } else {
-            unblockParams.position = 2;
+            unblockParams.qIndex = 2;
           }
 
           this.gameService.unblock(unblockParams).subscribe({
             next: (u) => {
               (this.unblockResponse.gameId = u.gameId),
-                (this.unblockResponse.player = u.player),
-                (this.unblockResponse.position = u.position);
+                (this.unblockResponse.issuer = u.issuer),
+                (this.unblockResponse.qIndex = u.qIndex);
             },
             // error: (err) => (this.errorMessage = err),
           });

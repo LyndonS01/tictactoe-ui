@@ -1,6 +1,6 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 import { IGame } from '../models/game';
-import { NewGameModel } from '../models/newGameModel';
+import { NewGameModel } from '../models/newgame-model';
 import {
   HttpClientTestingModule,
   HttpTestingController,
@@ -8,12 +8,13 @@ import {
 
 import { GameService } from './game.service';
 import { environment } from 'src/environments/environment';
-import { MoveModel } from '../models/moveModel';
+import { MoveModel } from '../models/move-model';
+import { UnblockModel } from '../models/unblock-model';
+import { CellsComponent } from '../components/cells/cells.component';
 
 describe('GameService', () => {
   let service: GameService;
   let httpMock: HttpTestingController;
-  // let injector: TestBed;
 
   const game: IGame = {
     gameId: 1,
@@ -41,8 +42,6 @@ describe('GameService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({ imports: [HttpClientTestingModule] });
     service = TestBed.inject(GameService);
-    // injector = getTestBed();
-    // httpMock = injector.get(HttpTestingController);
     httpMock = TestBed.inject(HttpTestingController);
   });
 
@@ -131,12 +130,12 @@ describe('GameService', () => {
   });
 
   describe('#unblock', () => {
-    it('it should Move params and receive the published message', () => {
-      const unblockParams = new MoveModel('Player 1', 1, 1);
+    it('it should use unbolck params and receive the published message', () => {
+      const unblockParams = new UnblockModel('Player 1', 1, 1);
       const unblockResponse = {
         gameId: 1,
-        player: 'Player 1', // irrelevant
-        position: 1, // index to route key or queue
+        issuer: 'Player 1', // irrelevant
+        qIndex: 1, // index to route key or queue
       };
 
       service.unblock(unblockParams).subscribe((result) => {
@@ -144,7 +143,7 @@ describe('GameService', () => {
       });
 
       const req = httpMock.expectOne(
-        `${environment.game.baseurl}${environment.game.endpoint}${environment.game.unblock}?gameId=${unblockParams.gameId}&id=${unblockParams.position}`
+        `${environment.game.baseurl}${environment.game.endpoint}${environment.game.unblock}?gameId=${unblockParams.gameId}&id=${unblockParams.qIndex}`
       );
       expect(req.request.method).toBe('GET');
       req.flush(unblockResponse);
