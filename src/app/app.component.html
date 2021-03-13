@@ -1,7 +1,12 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align: center">
-  <h1>{{ title }}</h1>
-  <br />
-  <br />
-  <app-cells></app-cells>
+<nav class="navbar navbar-expand navbar-light bg-light">
+  <a class="navbar-brand">{{ title }}</a>
+  <ul class="nav nav-pills">
+    <li><a class="nav-link" [routerLink]="['/home']">Home</a></li>
+    <!-- <li><a class='nav-link' [routerLink]="['/login']">Login</a></li> -->
+  </ul>
+</nav>
+<br />
+<br />
+<div class="container center">
+  <router-outlet></router-outlet>
 </div>

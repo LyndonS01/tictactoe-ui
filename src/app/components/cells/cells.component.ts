@@ -11,7 +11,7 @@ import { GameService } from 'src/app/services/game.service';
 import { MessagesService } from 'src/app/services/messages.service';
 
 @Component({
-  selector: 'app-cells',
+  // selector: 'app-cells',
   templateUrl: './cells.component.html',
   styleUrls: ['./cells.component.css'],
 })
