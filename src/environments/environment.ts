@@ -11,6 +11,11 @@ export const environment = {
     new: 'new',
     unblock: 'unblock',
   },
+  auth: {
+    url: 'http://localhost:8080/',
+    endpoint: 'auth',
+    register: '/register',
+  },
 };
 
 /*

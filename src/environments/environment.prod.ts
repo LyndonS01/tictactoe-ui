@@ -6,4 +6,9 @@ export const environment = {
     move: 'move/',
     new: 'new',
   },
+  auth: {
+    url: 'http://localhost:8080/',
+    endpoint: 'auth',
+    register: '/register',
+  },
 };
