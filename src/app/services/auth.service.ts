@@ -10,7 +10,10 @@ import { environment } from 'src/environments/environment';
 export class AuthService {
   constructor(private http: HttpClient) {}
 
-  authenticate(username: string, password: string): Observable<any> {
+  authenticate(
+    username: string | undefined,
+    password: string | undefined
+  ): Observable<any> {
     return this.http
       .post<string>(
         `${environment.auth.url}${environment.auth.endpoint}`,
