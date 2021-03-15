@@ -1,3 +1,4 @@
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -39,6 +40,7 @@ describe('NavbarComponent', () => {
       imports: [RouterTestingModule],
       declarations: [NavbarComponent],
       providers: [
+        { provide: LocationStrategy, useClass: HashLocationStrategy },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
         { provide: LocalStorageService, useClass: MockLocalStorageService },
       ],
