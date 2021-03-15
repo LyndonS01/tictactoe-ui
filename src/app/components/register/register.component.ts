@@ -42,7 +42,7 @@ export class RegisterComponent implements OnInit {
         },
         (err) => {
           this.error = true;
-          this.errorMessage = 'Invalid username or password';
+          this.errorMessage = 'Username already taken';
           console.log(this.errorMessage);
         }
       );
