@@ -1,9 +1,10 @@
+import { componentFactoryName } from '@angular/compiler';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
-// import { UserModel } from 'src/app/models/user-model';
 import { AuthService } from 'src/app/services/auth.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 
 import { LoginComponent } from './login.component';
 
@@ -17,18 +18,19 @@ class MockAuthService {
   }
 }
 
-class MockRouter {
-  navigate(): void {}
+class MockNavigationService {
+  back(): void {}
+  back2home(): void {}
 }
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
   let service: AuthService;
-  let router: Router;
+  let navigation: NavigationService;
 
-  let testUsername = '';
-  let testPassword = '';
+  let testUsername = 'test';
+  let testPassword = 'test';
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -36,7 +38,7 @@ describe('LoginComponent', () => {
       declarations: [LoginComponent],
       providers: [
         { provide: AuthService, useClass: MockAuthService },
-        { provide: Router, useClass: MockRouter },
+        { provide: NavigationService, useClass: MockNavigationService },
       ],
     }).compileComponents();
   });
@@ -50,7 +52,7 @@ describe('LoginComponent', () => {
 
     fixture.detectChanges();
     service = TestBed.inject(AuthService);
-    router = TestBed.inject(Router);
+    navigation = TestBed.inject(NavigationService);
   });
 
   it('should create', () => {
@@ -77,19 +79,13 @@ describe('LoginComponent', () => {
   });
 
   it('should have error after unsuccessful onLogin()', () => {
+    component.model.username = 'wrong';
+    component.model.password = 'right';
+    const spy = spyOn(navigation, 'back2home');
+
     component.onLogin();
-    expect(component.error).toBeTruthy();
+    expect(spy).not.toHaveBeenCalled();
   });
-
-  // it('should set username', () => {
-  //   component.model.username = testUsername;
-  //   expect(component.model.username).toEqual(testUsername);
-  // });
-
-  // it('should set password', () => {
-  //   component.model.password = testPassword;
-  //   expect(component.model.password).toEqual(testPassword);
-  // });
 
   it('should call authenticate after onLogin()', () => {
     spyOn(service, 'authenticate').and.returnValue(of({}));
@@ -100,7 +96,7 @@ describe('LoginComponent', () => {
   });
 
   it('should navigate back to home after onLogin() with valid userModel', () => {
-    const spy = spyOn(router, 'navigate');
+    const spy = spyOn(navigation, 'back2home');
     component.model.username = testUsername;
     component.model.password = testPassword;
     component.onLogin();

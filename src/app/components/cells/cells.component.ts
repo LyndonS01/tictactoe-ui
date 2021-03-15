@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { ICurrentBoard, IGame } from 'src/app/models/game';
 import { MoveModel } from 'src/app/models/move-model';
 import { NewGameModel } from 'src/app/models/newgame-model';
@@ -8,6 +6,7 @@ import { SymbolsModel } from 'src/app/models/symbols-model';
 import { UnblockModel } from 'src/app/models/unblock-model';
 import { UnblockResponseModel } from 'src/app/models/unblock-response-model';
 import { GameService } from 'src/app/services/game.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { MessagesService } from 'src/app/services/messages.service';
 
 @Component({
@@ -16,7 +15,9 @@ import { MessagesService } from 'src/app/services/messages.service';
   styleUrls: ['./cells.component.css'],
 })
 export class CellsComponent implements OnInit {
-  username = 'Left';
+  // username = 'Left';
+  title = 'Welcome to Tic-Tac-Toe';
+  username = '';
   opponent = '';
   gameId = 0;
   position = 0;
@@ -32,15 +33,20 @@ export class CellsComponent implements OnInit {
   boardLocked = false;
   gameOver = false;
   unblockResponse = new UnblockResponseModel();
+  loginRequired = true;
 
   constructor(
     private gameService: GameService,
-    public messagesService: MessagesService
+    public messagesService: MessagesService,
+    private localStorageService: LocalStorageService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.initUsername();
+  }
 
   humanButtonClicked(): void {
+    this.initUsername();
     this.opponent = '';
     this.opponentTypeSelected = true;
     this.humanOpponent = true;
@@ -65,6 +71,7 @@ export class CellsComponent implements OnInit {
   }
 
   cpuButtonClicked(): void {
+    this.initUsername();
     this.opponent = 'Computer';
     this.opponentTypeSelected = true;
     const newGameParams: NewGameModel = {
@@ -291,6 +298,19 @@ export class CellsComponent implements OnInit {
           });
         }
       }
+    }
+  }
+
+  initUsername(): void {
+    if (this.localStorageService.getValue('token')) {
+      // this.token = this.localStorageService.getValue('token');
+      this.username = this.localStorageService.getValue('user');
+      this.loginRequired = false;
+      // this.loginMessage = 'Logout';
+    } else {
+      this.username = '';
+      this.loginRequired = true;
+      // this.loginMessage = 'Login';
     }
   }
 }

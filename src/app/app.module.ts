@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { CellsComponent } from './components/cells/cells.component';
 import { LoginComponent } from './components/login/login.component';
 import { MessagesComponent } from './components/messages/messages.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { MessagesComponent } from './components/messages/messages.component';
     CellsComponent,
     MessagesComponent,
     LoginComponent,
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,
