@@ -3,7 +3,7 @@
     <div *ngIf="errorMessage" class="alert alert-warning">
       {{ errorMessage }}
     </div>
-    <form (submit)="onLogin()" #theForm="ngForm" novalidate>
+    <form (submit)="onRegister()" #theForm="ngForm" novalidate>
       <div class="form-group">
         <label for="username">Username</label>
         <input
@@ -46,14 +46,11 @@
         <input
           type="submit"
           class="btn btn-success"
-          value="Login"
+          value="Register"
           [disabled]="theForm.invalid"
         />
         <span> or </span>
         <a [routerLink]="['/']" class="btn btn-dark">Cancel</a>
-        <div><br /></div>
-        <a [routerLink]="['/register']" class="btn btn-secondary">Register</a
-        ><span> here for new users</span>
       </div>
     </form>
   </div>
