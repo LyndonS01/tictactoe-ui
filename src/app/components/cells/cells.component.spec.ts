@@ -1,6 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Observable, of } from 'rxjs';
 import { ICurrentBoard, IGame } from 'src/app/models/game';
 import { MoveModel } from 'src/app/models/move-model';
@@ -8,8 +7,8 @@ import { NewGameModel } from 'src/app/models/newgame-model';
 import { UnblockModel } from 'src/app/models/unblock-model';
 import { UnblockResponseModel } from 'src/app/models/unblock-response-model';
 import { GameService } from 'src/app/services/game.service';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 import { MessagesService } from 'src/app/services/messages.service';
-import { MessagesComponent } from '../messages/messages.component';
 
 import { CellsComponent } from './cells.component';
 
@@ -79,11 +78,29 @@ class MockService {
   }
 }
 
+class MockLocalStorageService {
+  // Mocking local storage
+  store: { [index: string]: string | null } = {};
+
+  getValue(key: string): string | null {
+    return key in this.store ? this.store[key] : null;
+  }
+
+  storeValue(key: string, value: string): void {
+    this.store[key] = `${value}`;
+  }
+
+  removeValue(key: string): void {
+    this.store[key] = null;
+  }
+}
+
 describe('CellsComponent', () => {
   let component: CellsComponent;
   let fixture: ComponentFixture<CellsComponent>;
   let service1: GameService;
   let service2: MessagesService;
+  let service3: LocalStorageService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -92,6 +109,7 @@ describe('CellsComponent', () => {
       providers: [
         { provide: GameService, useClass: MockService },
         { provide: MessagesService, useClass: MessagesService },
+        { provide: LocalStorageService, useClass: MockLocalStorageService },
       ],
     }).compileComponents();
   });
@@ -101,6 +119,7 @@ describe('CellsComponent', () => {
     component = fixture.componentInstance;
     service1 = TestBed.inject(GameService);
     service2 = TestBed.inject(MessagesService);
+    service3 = TestBed.inject(LocalStorageService);
 
     fixture.detectChanges();
   });
@@ -324,7 +343,9 @@ describe('CellsComponent', () => {
   it('humanButtonClicked should give correct message service when game is undefined', () => {
     const spyService = spyOn(service2, 'add');
 
-    component.username = 'Test Player';
+    // component.username = 'Test Player';
+    service3.storeValue('token', 'testtoken');
+    service3.storeValue('user', 'Test Player');
 
     component.humanButtonClicked();
 
@@ -759,5 +780,45 @@ describe('CellsComponent', () => {
 
     const out1 = expect(spyService).toHaveBeenCalledWith(unblockParams);
     const out2 = expect(spyService).toHaveBeenCalledTimes(1);
+  });
+
+  it('humanButtonClicked should clear username if no token found', () => {
+    service3.removeValue('token');
+    service3.storeValue('user', 'testuser');
+
+    component.humanButtonClicked();
+
+    const out1 = expect(component.loginRequired).toBe(true);
+    const out2 = expect(component.username).toEqual('');
+  });
+
+  it('humanButtonClicked should set username if token is present', () => {
+    service3.storeValue('token', 'testtoken');
+    service3.storeValue('user', 'Test Player');
+
+    component.humanButtonClicked();
+
+    const out1 = expect(component.loginRequired).toBe(false);
+    const out2 = expect(component.username).toEqual('Test Player');
+  });
+
+  it('cpuButtonClicked should clear username if no token found', () => {
+    service3.removeValue('token');
+    service3.storeValue('user', 'testuser');
+
+    component.cpuButtonClicked();
+
+    const out1 = expect(component.loginRequired).toBe(true);
+    const out2 = expect(component.username).toEqual('');
+  });
+
+  it('cpuButtonClicked should set username if token is present', () => {
+    service3.storeValue('token', 'testtoken');
+    service3.storeValue('user', 'Test Player');
+
+    component.cpuButtonClicked();
+
+    const out1 = expect(component.loginRequired).toBe(false);
+    const out2 = expect(component.username).toEqual('Test Player');
   });
 });

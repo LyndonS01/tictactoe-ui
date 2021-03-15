@@ -1,27 +1,8 @@
-<!-- <div id="intro-screen" class="center">
-  <h2>Choose your symbol:</h2>
-  <button type="button" id="choose-x" class="choose">X</button>
-  <button type="button" id="choose-o" class="choose">O</button>
-</div> -->
-
-<!-- <div class="col-md-2 center" *ngIf="!playerSelected">
-  <form #f="ngForm" (ngSubmit)="onPlayerNameEntered(f)" novalidate>
-    <input name="playerName" ngModel required #playerName="ngModel" />
-    <button>Submit</button>
-  </form>
-
-  <p>Player name value: {{ playerName.value }}</p>
-  <p>Player name valid: {{ playerName.valid }}</p>
-  <p>Form value: {{ f.value | json }}</p>
-  <p>Form valid: {{ f.valid }}</p>
-</div> -->
-
-<!-- <div
+<div
   id="enemy-screen"
   class="center"
-  *ngIf="!opponentTypeSelected && playerSelected"
-> -->
-<div id="enemy-screen" class="center" *ngIf="!opponentTypeSelected">
+  *ngIf="!opponentTypeSelected && !loginRequired"
+>
   <h2>Play against:</h2>
   <button
     type="button"
@@ -42,7 +23,7 @@
 </div>
 
 <div class="row">
-  <div class="col-8" *ngIf="opponentTypeSelected">
+  <div class="col-8" *ngIf="opponentTypeSelected && !loginRequired">
     <div id="game-screen">
       <table class="table table-bordered center" *ngIf="game">
         <tr>
@@ -287,17 +268,19 @@
     </div>
     <!-- <button type="button" id="restart">Restart</button> -->
     <br /><br />
-    <button
-      type="button"
-      class="btn btn-warning btn-lg"
-      value="Reset"
-      (click)="resetButtonClicked()"
-    >
-      Reset
-    </button>
+    <div class="text-center">
+      <button
+        type="button"
+        class="btn btn-warning btn-lg"
+        value="Reset"
+        (click)="resetButtonClicked()"
+      >
+        Reset
+      </button>
+    </div>
   </div>
 
-  <div class="col-4" *ngIf="opponentTypeSelected">
+  <div class="col-4" *ngIf="opponentTypeSelected && !loginRequired">
     <!-- <div class="text-left">Row for Scoreboard</div>
     <br /><br /> -->
     <app-messages></app-messages>
