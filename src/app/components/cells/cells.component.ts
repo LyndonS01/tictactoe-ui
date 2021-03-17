@@ -34,6 +34,8 @@ export class CellsComponent implements OnInit {
   gameOver = false;
   unblockResponse = new UnblockResponseModel();
   loginRequired = true;
+  setId = 0;
+  bestOf = 0;
 
   constructor(
     private gameService: GameService,
@@ -53,6 +55,8 @@ export class CellsComponent implements OnInit {
     const newGameParams: NewGameModel = {
       username: this.username,
       opponent: this.opponent,
+      setId: this.setId,
+      bestOf: this.bestOf,
     };
 
     this.messagesService.add(`Your move, ${this.username}`);
@@ -77,6 +81,8 @@ export class CellsComponent implements OnInit {
     const newGameParams: NewGameModel = {
       username: this.username,
       opponent: this.opponent,
+      setId: this.setId,
+      bestOf: this.bestOf,
     };
 
     this.messagesService.add('Your opponent is the game server');

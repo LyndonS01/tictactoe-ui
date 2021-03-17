@@ -35,6 +35,7 @@ class MockService {
         pos7: '',
         pos8: '',
       },
+      set: undefined,
     };
 
     return of(returnedGame);
@@ -62,6 +63,7 @@ class MockService {
         pos7: '',
         pos8: '',
       },
+      set: undefined,
     };
 
     return of(returnedGame);
@@ -301,6 +303,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: '',
       },
+      set: undefined,
     };
     component.game = sampleGame;
 
@@ -331,6 +334,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: '',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;
@@ -376,6 +380,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: '',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;
@@ -410,6 +415,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: '',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;
@@ -444,6 +450,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: '',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;
@@ -478,6 +485,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: 'X',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;
@@ -513,6 +521,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: 'X',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;
@@ -549,6 +558,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: 'X',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;
@@ -593,6 +603,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: 'X',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;
@@ -637,6 +648,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: 'X',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;
@@ -680,6 +692,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: 'X',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;
@@ -716,6 +729,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: 'X',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;
@@ -760,6 +774,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: 'X',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;

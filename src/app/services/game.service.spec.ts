@@ -37,6 +37,7 @@ describe('GameService', () => {
       pos7: '',
       pos8: '',
     },
+    set: undefined,
   };
 
   beforeEach(() => {
@@ -55,7 +56,7 @@ describe('GameService', () => {
 
   describe('#createNewGame', () => {
     it('it should create expected game', () => {
-      const testParams = new NewGameModel('Player 1', 'Computer');
+      const testParams = new NewGameModel('Player 1', 'Computer', 0, 0);
       const testResponse = {
         gameId: 1,
         player1: 'Player 1',
@@ -77,6 +78,7 @@ describe('GameService', () => {
           pos7: '',
           pos8: '',
         },
+        set: undefined,
       };
 
       service.newGame(testParams).subscribe((result) => {
@@ -115,6 +117,7 @@ describe('GameService', () => {
           pos7: '',
           pos8: '',
         },
+        set: undefined,
       };
 
       service.sendMove(testParams).subscribe((result) => {
