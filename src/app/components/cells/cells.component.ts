@@ -34,8 +34,8 @@ export class CellsComponent implements OnInit {
   gameOver = false;
   unblockResponse = new UnblockResponseModel();
   loginRequired = true;
-  setId = 0;
-  bestOf = 0;
+  setId: number | undefined;
+  bestOf = 3;
 
   constructor(
     private gameService: GameService,
@@ -68,6 +68,7 @@ export class CellsComponent implements OnInit {
           (this.gameId = game.gameId),
           (this.opponent = game.player2),
           this.copyBoard(game.currentBoard),
+          (this.setId = game.set?.setId),
           this.toggleBoardLock(game);
       },
       // error: (err) => (this.errorMessage = err),
@@ -93,6 +94,7 @@ export class CellsComponent implements OnInit {
         (this.game = game),
           (this.gameId = game.gameId),
           this.copyBoard(game.currentBoard),
+          (this.setId = game.set?.setId),
           this.toggleBoardLock(game);
       },
       // error: (err) => (this.errorMessage = err),
@@ -100,6 +102,9 @@ export class CellsComponent implements OnInit {
   }
 
   resetButtonClicked(): void {
+    if (this.game?.set?.setOver) {
+      this.setId = 0;
+    }
     this.opponent = '';
     this.opponentTypeSelected = false;
     this.playerSelected = false;
@@ -192,7 +197,11 @@ export class CellsComponent implements OnInit {
       if (this.winner === 'Computer') {
         winningPlayer = 'The computer';
       }
-      this.messagesService.add(`${winningPlayer} won the game!`);
+      this.messagesService.add(
+        `${winningPlayer} won the game${
+          this.game?.set?.setOver ? ' and set' : ''
+        }!`
+      );
       this.gameOver = true;
     } else {
       // There is no winner yet. If one position is left, then game is drawn.
