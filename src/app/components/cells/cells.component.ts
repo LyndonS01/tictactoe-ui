@@ -35,7 +35,11 @@ export class CellsComponent implements OnInit {
   unblockResponse = new UnblockResponseModel();
   loginRequired = true;
   setId: number | undefined;
-  bestOf = 3;
+  bestOfSelected = false;
+
+  public model = {
+    bestOf: 1,
+  };
 
   constructor(
     private gameService: GameService,
@@ -56,7 +60,7 @@ export class CellsComponent implements OnInit {
       username: this.username,
       opponent: this.opponent,
       setId: this.setId,
-      bestOf: this.bestOf,
+      bestOf: this.model.bestOf,
     };
 
     this.messagesService.add(`Your move, ${this.username}`);
@@ -83,7 +87,7 @@ export class CellsComponent implements OnInit {
       username: this.username,
       opponent: this.opponent,
       setId: this.setId,
-      bestOf: this.bestOf,
+      bestOf: this.model.bestOf,
     };
 
     this.messagesService.add('Your opponent is the game server');
@@ -102,9 +106,16 @@ export class CellsComponent implements OnInit {
   }
 
   resetButtonClicked(): void {
-    if (this.game?.set?.setOver) {
+    if (this.model.bestOf > 1 && this.game?.set?.setOver) {
       this.setId = 0;
+      this.model.bestOf = 1;
+      this.bestOfSelected = false;
     }
+
+    if (this.model.bestOf === 1) {
+      this.bestOfSelected = false;
+    }
+
     this.opponent = '';
     this.opponentTypeSelected = false;
     this.playerSelected = false;
@@ -116,6 +127,7 @@ export class CellsComponent implements OnInit {
     this.game = undefined;
     this.gameOver = false;
     this.unblockResponse.gameId = 0;
+    this.errorMessage = '';
   }
 
   positionButtonClicked(position: number): void {
@@ -318,14 +330,16 @@ export class CellsComponent implements OnInit {
 
   initUsername(): void {
     if (this.localStorageService.getValue('token')) {
-      // this.token = this.localStorageService.getValue('token');
       this.username = this.localStorageService.getValue('user');
       this.loginRequired = false;
-      // this.loginMessage = 'Logout';
     } else {
       this.username = '';
       this.loginRequired = true;
-      // this.loginMessage = 'Login';
     }
+  }
+
+  onBestOfEntered(): void {
+    // validate input
+    this.bestOfSelected = true;
   }
 }

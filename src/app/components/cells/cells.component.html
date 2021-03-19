@@ -1,7 +1,47 @@
 <div
+  class="row"
+  *ngIf="!opponentTypeSelected && !loginRequired && !bestOfSelected"
+>
+  <div class="col-md-4 offset-md-4">
+    <div *ngIf="errorMessage" class="alert alert-warning">
+      {{ errorMessage }}
+    </div>
+    <form (submit)="onBestOfEntered()" #theForm="ngForm" novalidate>
+      <div class="form-group">
+        <label for="bestOf">Select desired "Best Of" Game Count</label>
+        <input
+          type="number"
+          class="form-control"
+          name="bestOf"
+          [(ngModel)]="model.bestOf"
+          #bestOf="ngModel"
+          required
+        />
+        <div
+          class="text-danger"
+          *ngIf="bestOf.touched && bestOf.invalid && bestOf.errors?.required"
+        >
+          "Best of" count should an odd number of games
+        </div>
+      </div>
+      <div class="form-group">
+        <input
+          type="submit"
+          class="btn btn-success"
+          value="Enter"
+          [disabled]="theForm.invalid"
+        />
+        <!-- <span> or </span>
+        <a [routerLink]="['/']" class="btn btn-dark">Cancel</a> -->
+      </div>
+    </form>
+  </div>
+</div>
+
+<div
   id="enemy-screen"
   class="center"
-  *ngIf="!opponentTypeSelected && !loginRequired"
+  *ngIf="!opponentTypeSelected && !loginRequired && bestOfSelected"
 >
   <h3>Choose your opponent:</h3>
   <button
