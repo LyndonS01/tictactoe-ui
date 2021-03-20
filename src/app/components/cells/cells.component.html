@@ -2,13 +2,13 @@
   class="row"
   *ngIf="!opponentTypeSelected && !loginRequired && !bestOfSelected"
 >
-  <div class="col-md-4 offset-md-4">
+  <div class="col-md-3 offset-md-5">
     <div *ngIf="errorMessage" class="alert alert-warning">
       {{ errorMessage }}
     </div>
     <form (submit)="onBestOfEntered()" #theForm="ngForm" novalidate>
       <div class="form-group">
-        <label for="bestOf">Select desired "Best Of" Game Count</label>
+        <label for="bestOf">Choose "Best Of" Game Count</label>
         <input
           type="number"
           min="1"
@@ -66,7 +66,7 @@
 </div>
 
 <div class="row">
-  <div class="col-8" *ngIf="opponentTypeSelected && !loginRequired">
+  <div class="col-md-6" *ngIf="opponentTypeSelected && !loginRequired">
     <div id="game-screen">
       <table class="table table-bordered center" *ngIf="game">
         <tr>
@@ -309,27 +309,82 @@
         </tr>
       </table>
     </div>
-    <!-- <button type="button" id="restart">Restart</button> -->
     <br /><br />
-    <div class="text-center">
-      <button
-        type="button"
-        class="btn btn-warning btn-lg"
-        value="Reset"
-        (click)="resetButtonClicked()"
-      >
-        Reset
-      </button>
+    <div
+      class="btn-toolbar justify-content-between"
+      role="toolbar"
+      aria-label="Controls with button groups"
+    >
+      <div class="btn-group mr-2" role="group" aria-label="First group">
+        <button
+          type="button"
+          class="btn btn-info btn-lg"
+          *ngIf="
+            bestOfSelected &&
+            opponentTypeSelected &&
+            !loginRequired &&
+            model.bestOf >= 3 &&
+            gameOver &&
+            !game?.set?.setOver
+          "
+          value="Continue"
+          (click)="continueButtonClicked()"
+        >
+          Continue
+        </button>
+      </div>
+      <div class="btn-group mr-2" role="group" aria-label="Second group">
+        <button
+          type="button"
+          class="btn btn-warning btn-lg"
+          value="Reset"
+          (click)="resetButtonClicked()"
+        >
+          Reset
+        </button>
+      </div>
     </div>
   </div>
 
-  <div class="col-4" *ngIf="opponentTypeSelected && !loginRequired">
-    <!-- <div class="text-left">Row for Scoreboard</div>
-    <br /><br /> -->
+  <div
+    class="col-md-2"
+    *ngIf="bestOfSelected && opponentTypeSelected && !loginRequired"
+  >
     <app-messages></app-messages>
   </div>
-
-  <!-- <div class="col-2 col-md-2" *ngIf="opponentTypeSelected">
-    Column for Scoreboard
-  </div> -->
+  <div
+    class="col-md-4"
+    *ngIf="
+      bestOfSelected &&
+      opponentTypeSelected &&
+      !loginRequired &&
+      model.bestOf >= 3
+    "
+  >
+    <div class="table-responsive-sm">
+      <table class="table score w-auto">
+        <thead>
+          <tr>
+            <th colspan="2" class="w-auto">
+              <h4>Best of {{ model.bestOf }} Scoreboard</h4>
+            </th>
+          </tr>
+          <tr>
+            <th class="w-auto">Player</th>
+            <th class="w-auto">Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="score w-auto">You {{ score.you }}</td>
+            <td class="score w-auto">{{ score.yourScore }}</td>
+          </tr>
+          <tr>
+            <td class="score w-auto">Opponent {{ score.opponent }}</td>
+            <td class="score w-auto">{{ score.opponentScore }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

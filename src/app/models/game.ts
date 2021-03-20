@@ -29,7 +29,7 @@ export interface ICurrentBoard {
 export interface ISet {
   setId: number;
   bestOf: number;
-  You: number;
-  Opponent: number;
+  you: number;
+  opponent: number;
   setOver: boolean;
 }

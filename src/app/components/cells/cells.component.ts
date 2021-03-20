@@ -41,6 +41,13 @@ export class CellsComponent implements OnInit {
     bestOf: 1,
   };
 
+  score = {
+    you: '',
+    opponent: '',
+    yourScore: 0,
+    opponentScore: 0,
+  };
+
   constructor(
     private gameService: GameService,
     public messagesService: MessagesService,
@@ -106,15 +113,19 @@ export class CellsComponent implements OnInit {
   }
 
   resetButtonClicked(): void {
-    if (this.model.bestOf > 1 && this.game?.set?.setOver) {
-      this.setId = 0;
-      this.model.bestOf = 1;
-      this.bestOfSelected = false;
-    }
+    // if (this.model.bestOf > 1 && this.game?.set?.setOver) {
+    this.setId = 0;
+    this.model.bestOf = 1;
+    this.bestOfSelected = false;
+    this.score.you = '';
+    this.score.opponent = '';
+    this.score.yourScore = 0;
+    this.score.opponentScore = 0;
+    // }
 
-    if (this.model.bestOf === 1) {
-      this.bestOfSelected = false;
-    }
+    // if (this.model.bestOf === 1) {
+    //   this.bestOfSelected = false;
+    // }
 
     this.opponent = '';
     this.opponentTypeSelected = false;
@@ -184,6 +195,7 @@ export class CellsComponent implements OnInit {
             (this.winner = game.winner),
             this.copyBoard(game.currentBoard),
             this.checkWinOrDraw(game.currentBoard),
+            this.initScoreboard(game),
             this.unblockOpponent(game),
             this.toggleBoardLock(game),
             this.messagesService.add(
@@ -341,5 +353,35 @@ export class CellsComponent implements OnInit {
   onBestOfEntered(): void {
     // validate input
     this.bestOfSelected = true;
+  }
+
+  initScoreboard(game: IGame): void {
+    if (this.game && this.model.bestOf >= 3 && game.set) {
+      this.model.bestOf = game.set.bestOf;
+      this.bestOfSelected = true;
+      if (this.username === game.player1) {
+        this.score.you = `(${game.player1})`;
+        this.score.opponent = `(${game.player2})`;
+        this.score.yourScore = +game.set?.you;
+        this.score.opponentScore = +game.set?.opponent;
+      } else {
+        this.score.you = `(${game.player2})`;
+        this.score.opponent = `(${game.player1})`;
+        this.score.yourScore = +game.set?.opponent;
+        this.score.opponentScore = +game.set?.you;
+      }
+    }
+  }
+
+  continueButtonClicked(): void {
+    this.gameOver = false;
+    this.opponentTypeSelected = true;
+    this.bestOfSelected = true;
+    this.winner = '';
+    if (this.humanOpponent) {
+      this.humanButtonClicked();
+    } else {
+      this.cpuButtonClicked();
+    }
   }
 }
