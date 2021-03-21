@@ -103,7 +103,7 @@ table.score th {
 table.score td {
   padding: 10px !important;
 }
-/* td.score {
-  padding: 0px !important;
-  height: 50px !important;
+
+/* table.score tr {
+  line-height: 30px !important;
 } */
