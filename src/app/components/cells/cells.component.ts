@@ -25,7 +25,7 @@ export class CellsComponent implements OnInit {
   winner = '';
   errorMessage = '';
   opponentTypeSelected = false;
-  playerSelected = false;
+  // playerSelected = false;
   game: IGame | undefined;
   filledPositions = 0;
   humanOpponent = false;
@@ -129,7 +129,7 @@ export class CellsComponent implements OnInit {
 
     this.opponent = '';
     this.opponentTypeSelected = false;
-    this.playerSelected = false;
+    // this.playerSelected = false;
     this.filledPositions = 0;
     this.winner = '';
     this.messagesService.clear();
@@ -358,6 +358,7 @@ export class CellsComponent implements OnInit {
   initScoreboard(game: IGame): void {
     if (this.game && this.model.bestOf >= 3 && game.set) {
       this.model.bestOf = game.set.bestOf;
+      this.setId = game.set.setId;
       this.bestOfSelected = true;
       if (this.username === game.player1) {
         this.score.you = `(${game.player1})`;
@@ -375,9 +376,17 @@ export class CellsComponent implements OnInit {
 
   continueButtonClicked(): void {
     this.gameOver = false;
-    this.opponentTypeSelected = true;
+    // this.opponentTypeSelected = true;
     this.bestOfSelected = true;
     this.winner = '';
+    //
+    this.opponent = '';
+    this.filledPositions = 0;
+    this.messagesService.clear();
+    this.game = undefined;
+    this.unblockResponse.gameId = 0;
+    this.errorMessage = '';
+    //
     if (this.humanOpponent) {
       this.humanButtonClicked();
     } else {
