@@ -22,10 +22,7 @@ export class GameService {
     return this.http
       .post<IGame>(
         `${environment.game.baseurl}${environment.game.endpoint}${environment.game.new}`,
-        {
-          username: newGameParams.username,
-          opponent: newGameParams.opponent,
-        }
+        newGameParams
       )
       .pipe(
         tap((data) => console.log('Response: ' + JSON.stringify(data))),
@@ -37,11 +34,7 @@ export class GameService {
     return this.http
       .post<IGame>(
         `${environment.game.baseurl}${environment.game.endpoint}${environment.game.move}`,
-        {
-          username: moveParams.username,
-          gameId: moveParams.gameId,
-          position: moveParams.position,
-        }
+        moveParams
       )
       .pipe(
         tap((data) => console.log('Response: ' + JSON.stringify(data))),

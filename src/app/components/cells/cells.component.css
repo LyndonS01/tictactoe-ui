@@ -58,10 +58,6 @@ td {
   background-color: #c88; /* Red background to highlight the "winning" line */
 }
 
-/* .player-two {
-  color: #933;
-} */
-
 /****** BUTTONS ******/
 
 button {
@@ -69,13 +65,6 @@ button {
   border: none; /* Hides default border (and color, for some reason */
   color: #333;
 }
-
-/* #restart {
-  font-size: 1.2em;
-  padding: 5px 10px;
-  margin: 20px auto;
-  display: block;
-} */
 
 .choose,
 #restart {
@@ -105,3 +94,16 @@ button {
 .cannotuse {
   cursor: not-allowed;
 }
+
+/******  SCORE BOARD  ******/
+table.score th {
+  padding: 10px !important;
+}
+
+table.score td {
+  padding: 10px !important;
+}
+
+/* table.score tr {
+  line-height: 30px !important;
+} */

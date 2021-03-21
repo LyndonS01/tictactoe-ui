@@ -8,6 +8,7 @@ export interface IGame {
   winner: string;
   winningLine: number;
   currentBoard: ICurrentBoard;
+  set: ISet | undefined;
 }
 
 export interface ICurrentBoard {
@@ -23,4 +24,12 @@ export interface ICurrentBoard {
   pos6: string;
   pos7: string;
   pos8: string;
+}
+
+export interface ISet {
+  setId: number;
+  bestOf: number;
+  you: number;
+  opponent: number;
+  setOver: boolean;
 }

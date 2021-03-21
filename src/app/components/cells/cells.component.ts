@@ -25,7 +25,7 @@ export class CellsComponent implements OnInit {
   winner = '';
   errorMessage = '';
   opponentTypeSelected = false;
-  playerSelected = false;
+  // playerSelected = false;
   game: IGame | undefined;
   filledPositions = 0;
   humanOpponent = false;
@@ -34,6 +34,19 @@ export class CellsComponent implements OnInit {
   gameOver = false;
   unblockResponse = new UnblockResponseModel();
   loginRequired = true;
+  setId: number | undefined;
+  bestOfSelected = false;
+
+  public model = {
+    bestOf: 1,
+  };
+
+  score = {
+    you: '',
+    opponent: '',
+    yourScore: 0,
+    opponentScore: 0,
+  };
 
   constructor(
     private gameService: GameService,
@@ -53,6 +66,8 @@ export class CellsComponent implements OnInit {
     const newGameParams: NewGameModel = {
       username: this.username,
       opponent: this.opponent,
+      setId: this.setId,
+      bestOf: this.model.bestOf,
     };
 
     this.messagesService.add(`Your move, ${this.username}`);
@@ -64,6 +79,7 @@ export class CellsComponent implements OnInit {
           (this.gameId = game.gameId),
           (this.opponent = game.player2),
           this.copyBoard(game.currentBoard),
+          (this.setId = game.set?.setId),
           this.toggleBoardLock(game);
       },
       // error: (err) => (this.errorMessage = err),
@@ -77,6 +93,8 @@ export class CellsComponent implements OnInit {
     const newGameParams: NewGameModel = {
       username: this.username,
       opponent: this.opponent,
+      setId: this.setId,
+      bestOf: this.model.bestOf,
     };
 
     this.messagesService.add('Your opponent is the game server');
@@ -87,6 +105,7 @@ export class CellsComponent implements OnInit {
         (this.game = game),
           (this.gameId = game.gameId),
           this.copyBoard(game.currentBoard),
+          (this.setId = game.set?.setId),
           this.toggleBoardLock(game);
       },
       // error: (err) => (this.errorMessage = err),
@@ -94,9 +113,23 @@ export class CellsComponent implements OnInit {
   }
 
   resetButtonClicked(): void {
+    // if (this.model.bestOf > 1 && this.game?.set?.setOver) {
+    this.setId = 0;
+    this.model.bestOf = 1;
+    this.bestOfSelected = false;
+    this.score.you = '';
+    this.score.opponent = '';
+    this.score.yourScore = 0;
+    this.score.opponentScore = 0;
+    // }
+
+    // if (this.model.bestOf === 1) {
+    //   this.bestOfSelected = false;
+    // }
+
     this.opponent = '';
     this.opponentTypeSelected = false;
-    this.playerSelected = false;
+    // this.playerSelected = false;
     this.filledPositions = 0;
     this.winner = '';
     this.messagesService.clear();
@@ -105,6 +138,7 @@ export class CellsComponent implements OnInit {
     this.game = undefined;
     this.gameOver = false;
     this.unblockResponse.gameId = 0;
+    this.errorMessage = '';
   }
 
   positionButtonClicked(position: number): void {
@@ -161,6 +195,7 @@ export class CellsComponent implements OnInit {
             (this.winner = game.winner),
             this.copyBoard(game.currentBoard),
             this.checkWinOrDraw(game.currentBoard),
+            this.initScoreboard(game),
             this.unblockOpponent(game),
             this.toggleBoardLock(game),
             this.messagesService.add(
@@ -186,7 +221,11 @@ export class CellsComponent implements OnInit {
       if (this.winner === 'Computer') {
         winningPlayer = 'The computer';
       }
-      this.messagesService.add(`${winningPlayer} won the game!`);
+      this.messagesService.add(
+        `${winningPlayer} won the game${
+          this.game?.set?.setOver ? ' and set' : ''
+        }!`
+      );
       this.gameOver = true;
     } else {
       // There is no winner yet. If one position is left, then game is drawn.
@@ -303,14 +342,55 @@ export class CellsComponent implements OnInit {
 
   initUsername(): void {
     if (this.localStorageService.getValue('token')) {
-      // this.token = this.localStorageService.getValue('token');
       this.username = this.localStorageService.getValue('user');
       this.loginRequired = false;
-      // this.loginMessage = 'Logout';
     } else {
       this.username = '';
       this.loginRequired = true;
-      // this.loginMessage = 'Login';
+    }
+  }
+
+  onBestOfEntered(): void {
+    // validate input
+    this.bestOfSelected = true;
+  }
+
+  initScoreboard(game: IGame): void {
+    if (this.game && this.model.bestOf >= 3 && game.set) {
+      this.model.bestOf = game.set.bestOf;
+      this.setId = game.set.setId;
+      this.bestOfSelected = true;
+      if (this.username === game.player1) {
+        this.score.you = `(${game.player1})`;
+        this.score.opponent = `(${game.player2})`;
+        this.score.yourScore = +game.set?.you;
+        this.score.opponentScore = +game.set?.opponent;
+      } else {
+        this.score.you = `(${game.player2})`;
+        this.score.opponent = `(${game.player1})`;
+        this.score.yourScore = +game.set?.opponent;
+        this.score.opponentScore = +game.set?.you;
+      }
+    }
+  }
+
+  continueButtonClicked(): void {
+    this.gameOver = false;
+    // this.opponentTypeSelected = true;
+    this.bestOfSelected = true;
+    this.winner = '';
+    //
+    this.opponent = '';
+    this.filledPositions = 0;
+    this.messagesService.clear();
+    this.game = undefined;
+    this.unblockResponse.gameId = 0;
+    this.errorMessage = '';
+    //
+    if (this.humanOpponent) {
+      this.humanButtonClicked();
+    } else {
+      this.cpuButtonClicked();
     }
   }
 }

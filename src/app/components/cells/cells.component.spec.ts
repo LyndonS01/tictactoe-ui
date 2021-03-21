@@ -35,6 +35,7 @@ class MockService {
         pos7: '',
         pos8: '',
       },
+      set: undefined,
     };
 
     return of(returnedGame);
@@ -62,6 +63,7 @@ class MockService {
         pos7: '',
         pos8: '',
       },
+      set: undefined,
     };
 
     return of(returnedGame);
@@ -80,14 +82,14 @@ class MockService {
 
 class MockLocalStorageService {
   // Mocking local storage
-  store: { [index: string]: string | null } = {};
+  store: { [index: string]: any } = {};
 
-  getValue(key: string): string | null {
-    return key in this.store ? this.store[key] : null;
+  getValue(key: string): any {
+    return key in this.store ? JSON.parse(this.store[key]) : null;
   }
 
-  storeValue(key: string, value: string): void {
-    this.store[key] = `${value}`;
+  storeValue(key: string, value: any): void {
+    this.store[key] = JSON.stringify(value);
   }
 
   removeValue(key: string): void {
@@ -301,6 +303,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: '',
       },
+      set: undefined,
     };
     component.game = sampleGame;
 
@@ -331,6 +334,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: '',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;
@@ -376,6 +380,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: '',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;
@@ -410,6 +415,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: '',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;
@@ -444,6 +450,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: '',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;
@@ -478,6 +485,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: 'X',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;
@@ -513,6 +521,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: 'X',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;
@@ -549,6 +558,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: 'X',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;
@@ -593,6 +603,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: 'X',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;
@@ -637,6 +648,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: 'X',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;
@@ -680,6 +692,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: 'X',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;
@@ -716,6 +729,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: 'X',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;
@@ -760,6 +774,7 @@ describe('CellsComponent', () => {
         pos7: '',
         pos8: 'X',
       },
+      set: undefined,
     };
 
     component.game = sampleGame;
@@ -820,5 +835,152 @@ describe('CellsComponent', () => {
 
     const out1 = expect(component.loginRequired).toBe(false);
     const out2 = expect(component.username).toEqual('Test Player');
+  });
+
+  it('initUsername should call localStorageService once if token is empty', () => {
+    const spyService = spyOn(service3, 'getValue');
+
+    service3.removeValue('token');
+
+    component.initUsername();
+
+    const out = expect(spyService).toHaveBeenCalledOnceWith('token');
+  });
+
+  it('initScoreboard should not set values if it is not a set of games', () => {
+    const sampleGame: IGame = {
+      gameId: 1,
+      player1: 'Player 1',
+      player2: 'Player 2',
+      nextMove: 'Player 2',
+      winner: 'Player 2',
+      winningLine: 1,
+      currentBoard: {
+        boardId: 1,
+        p1Symbol: 'O',
+        p2Symbol: 'X',
+        pos0: 'O',
+        pos1: 'O',
+        pos2: 'O',
+        pos3: '',
+        pos4: 'X',
+        pos5: '',
+        pos6: 'X',
+        pos7: '',
+        pos8: 'X',
+      },
+      set: undefined,
+    };
+
+    component.initScoreboard(sampleGame);
+    component.bestOfSelected = false;
+
+    const out = expect(component.bestOfSelected).toBe(false);
+  });
+
+  it('initScoreboard should set values for Player 1 as You twice if username is Player 1', () => {
+    const sampleGame: IGame = {
+      gameId: 1,
+      player1: 'Player 1',
+      player2: 'Player 2',
+      nextMove: 'Player 2',
+      winner: 'Player 2',
+      winningLine: 1,
+      currentBoard: {
+        boardId: 1,
+        p1Symbol: 'O',
+        p2Symbol: 'X',
+        pos0: 'O',
+        pos1: 'O',
+        pos2: 'O',
+        pos3: '',
+        pos4: 'X',
+        pos5: '',
+        pos6: 'X',
+        pos7: '',
+        pos8: 'X',
+      },
+      set: {
+        setId: 1,
+        bestOf: 3,
+        you: 1,
+        opponent: 2,
+        setOver: false,
+      },
+    };
+
+    component.game = sampleGame;
+    component.model.bestOf = 3;
+    component.username = 'Player 1';
+
+    component.initScoreboard(sampleGame);
+
+    const out1 = expect(component.score.you).toEqual('(Player 1)');
+    const out2 = expect(component.score.opponent).toEqual('(Player 2)');
+    const out3 = expect(component.score.yourScore).toEqual(1);
+    const out4 = expect(component.score.opponentScore).toEqual(2);
+  });
+
+  it('initScoreboard should set values for Player 2 as You twice if username is Player 2', () => {
+    const sampleGame: IGame = {
+      gameId: 1,
+      player1: 'Player 1',
+      player2: 'Player 2',
+      nextMove: 'Player 2',
+      winner: 'Player 2',
+      winningLine: 1,
+      currentBoard: {
+        boardId: 1,
+        p1Symbol: 'O',
+        p2Symbol: 'X',
+        pos0: 'O',
+        pos1: 'O',
+        pos2: 'O',
+        pos3: '',
+        pos4: 'X',
+        pos5: '',
+        pos6: 'X',
+        pos7: '',
+        pos8: 'X',
+      },
+      set: {
+        setId: 1,
+        bestOf: 3,
+        you: 1,
+        opponent: 2,
+        setOver: false,
+      },
+    };
+
+    component.game = sampleGame;
+    component.model.bestOf = 3;
+    component.username = 'Player 2';
+
+    component.initScoreboard(sampleGame);
+
+    const out1 = expect(component.score.you).toEqual('(Player 2)');
+    const out2 = expect(component.score.opponent).toEqual('(Player 1)');
+    const out3 = expect(component.score.yourScore).toEqual(2);
+    const out4 = expect(component.score.opponentScore).toEqual(1);
+  });
+
+  it('continueButtonClicked should reset properties and call humanButtonClicked if playing against human', () => {
+    component.humanOpponent = false;
+
+    component.gameOver = true;
+    component.bestOfSelected = false;
+    component.winner = 'Player 2';
+    component.filledPositions = 6;
+    component.unblockResponse.gameId = 1;
+    component.errorMessage = 'error message';
+
+    component.continueButtonClicked();
+
+    const out1 = expect(component.gameOver).toBe(false);
+    const out2 = expect(component.bestOfSelected).toBe(true);
+    const out3 = expect(component.winner).toEqual('');
+    const out4 = expect(component.filledPositions).toEqual(0);
+    const out5 = expect(component.unblockResponse.gameId).toEqual(0);
+    const out6 = expect(component.errorMessage).toBe('');
   });
 });
