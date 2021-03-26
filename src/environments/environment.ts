@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   game: {
-    baseurl: 'http://localhost:8081/',
+    baseurl: 'http://localhost:5000/',
     endpoint: 'game/',
     move: 'move',
     new: 'new',
